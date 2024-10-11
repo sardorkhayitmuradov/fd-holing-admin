@@ -1,0 +1,49 @@
+@import "styles";
+
+$background-color: #e6f7ff;
+
+.container {
+  @include flex(center,center);
+
+  width: 100vw;
+  height: 100vh;
+
+  &__wrapper {
+    @include flex(center, center);
+
+    width: 400px;
+    height: 100%;
+    min-width: $font-size-8;
+    flex-direction: column;
+    row-gap: $font-size-8;
+
+    &__form {
+      @include flex-column(unset, unset, $offset-12);
+
+      width: 100%;
+    }
+
+    & svg {
+      margin-bottom: $font-size-8;
+    }
+
+    .text {
+      border: 0.1rem solid #91d5ff;
+      background-color: $background-color;
+      margin-top: $font-size-8;
+    }
+
+    &__link {
+      text-decoration: none;
+      color: #1890ff;
+      margin-top: $font-size-12;
+      margin-bottom: $font-size-8;
+    }
+
+    &__btn {
+      margin-top: $offset-24;
+    }
+  }
+}
+
+

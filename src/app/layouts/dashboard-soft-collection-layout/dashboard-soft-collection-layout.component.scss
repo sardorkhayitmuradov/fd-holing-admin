@@ -1,0 +1,85 @@
+@import 'styles';
+
+:host {
+  .dashboard-scl {
+    width: 100vw;
+    min-height: 100vh;
+    box-sizing: border-box;
+
+    &__layout {
+
+      &__slider {
+
+        &__logo {
+          height: 100px !important;
+
+          &__icon {
+            box-sizing: border-box;
+            height: 100%;
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .trigger {
+      font-size: 18px;
+      line-height: 64px;
+      padding: 0 24px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    nz-header {
+      background: #fff;
+      padding: 0;
+    }
+
+    nz-content {
+      margin: 0 16px;
+    }
+
+    nz-breadcrumb {
+      margin: 16px 0;
+    }
+
+    .inner-content {
+      overflow-y: auto;
+      padding: 24px 24px 0 0;
+      background: #fff;
+      height: calc(100vh - 125px);
+
+    }
+
+    .inner-content::-webkit-scrollbar {
+      width: 2px;
+      background-color: #fff;
+      border-radius: 20px;
+    }
+
+    .inner-content::-webkit-scrollbar-thumb {
+      background: red;
+      border-radius: 20px;
+    }
+
+    nz-footer {
+      text-align: center;
+    }
+  }
+
+}
+
+::ng-deep {
+  .ant-layout-sider {
+    background: white !important;
+    border-right: 0.5px solid #ececec;
+  }
+
+  .ant-menu {
+    background: transparent !important;
+  }
+
+  .ant-layout {
+    background: transparent !important;
+  }
+}

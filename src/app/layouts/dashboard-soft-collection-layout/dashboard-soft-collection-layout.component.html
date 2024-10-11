@@ -1,0 +1,76 @@
+<div class="dashboard-scl">
+  <nz-layout class="dashboard-scl__layout" style="height: 100vh">
+    <nz-sider
+      [(nzCollapsed)]="isCollapsed"
+      [nzTrigger]="null"
+      [nzWidth]="300"
+      class="dashboard-scl__layout__slider"
+      nzCollapsible
+    >
+      <div class="dashboard-scl__layout__slider__logo">
+        <img
+          [ngStyle]="{ padding: isCollapsed ? '20px 10px' : '0' }"
+          [src]="
+            isCollapsed ? '/assets/apexbank-small.svg' : '/assets/apexbank.svg'
+          "
+          alt=""
+          class="dashboard-scl__layout__slider__logo__icon"
+        />
+      </div>
+
+      <ul nz-menu nzMode="inline">
+        <li
+          [routerLink]="['user-profile']"
+          nz-menu-item
+          routerLinkActive="ant-menu-item-selected"
+        >
+          <span nz-icon nzTheme="outline" nzType="unordered-list"></span>
+          <span>Профиль пользователя</span>
+        </li>
+        <li
+          [routerLink]="['loan-portfolio']"
+          nz-menu-item
+          routerLinkActive="ant-menu-item-selected"
+        >
+          <span nz-icon nzTheme="outline" nzType="unordered-list"></span>
+          <span>Кредитный портфель</span>
+        </li>
+        <li
+          [routerLink]="['reports']"
+          nz-menu-item
+          routerLinkActive="ant-menu-item-selected"
+        >
+          <span nz-icon nzTheme="outline" nzType="unordered-list"></span>
+          <span>Отчеты</span>
+        </li>
+        <li
+          [nzDisabled]="true"
+          nz-menu-item
+          routerLinkActive="ant-menu-item-selected"
+        >
+          <span nz-icon nzTheme="outline" nzType="unordered-list"></span>
+          <span>Администратор</span>
+        </li>
+      </ul>
+    </nz-sider>
+    <nz-layout>
+      <nz-header>
+        <span
+          (click)="isCollapsed = !isCollapsed"
+          [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+          class="trigger"
+          nz-icon
+          style="color: #e44b28"
+        ></span>
+      </nz-header>
+      <nz-content>
+        <nz-breadcrumb [nzAutoGenerate]="true" style="margin-left: 32px;">
+        </nz-breadcrumb>
+        <div class="inner-content">
+          <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+      <!--      <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer>-->
+    </nz-layout>
+  </nz-layout>
+</div>

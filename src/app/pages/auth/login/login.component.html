@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="container__wrapper">
+    <img src="/assets/apexbank.jpg" alt="apex bank logo">
+    <form [formGroup]="loginForm" class="container__wrapper__form">
+      <input [formControl]="loginForm.controls.username" nz-input placeholder="Ваш юзернейм" name="username" type="text">
+      <nz-input-group [nzSuffix]="suffixTemplate">
+        <input
+          [type]="passwordVisible ? 'text' : 'password'"
+          nz-input
+          placeholder="Ваш пароль"
+          [formControl]="loginForm.controls.password"
+        />
+      </nz-input-group>
+      <ng-template #suffixTemplate>
+        <span
+          nz-icon
+          [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+          (click)="passwordVisible = !passwordVisible"
+        ></span>
+      </ng-template>
+    </form>
+    @for(message of messages; track message) {
+      <nz-alert nzCloseable class="container__wrapper__tag" nzType="info" [nzMessage]="message | stringOrJson"></nz-alert>
+    }
+    <button [nzLoading]="loading" (click)="login()" [disabled]="!loginForm.valid" nz-button nzType="primary" class="container__wrapper__btn">Войти в аккаунт</button>
+  </div>
+</div>
