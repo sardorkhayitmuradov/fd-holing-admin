@@ -9,7 +9,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: '',
+    path: 'admin',
     loadChildren: () =>
       import('./pages/main/main.module').then((m) => m.MainModule),
     data: {
