@@ -1,0 +1,30 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "plugins": ["stylelint-scss"],
+  "rules": {
+    "function-name-case": [
+      "lower",
+      {
+        "ignoreFunctions": ["/var/"]
+      }
+    ],
+    "declaration-property-value-disallowed-list": {
+      "font-size": ["/^((?!\\$|var\\().)*$/"],
+      "color": ["/^((?!\\$|var\\().)*$/"],
+      "padding": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "padding-top": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "padding-right": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "padding-bottom": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "padding-left": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "margin": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "margin-top": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "margin-right": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "margin-bottom": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "margin-left": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "gap": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "grid-column-gap": ["^(\\$offset-[0-9]+|auto|0)$"],
+      "background-color": ["/^((?!\\$|var\\(|transparent).)*$/"],
+      "display": ["flex"]
+    }
+  }
+}

@@ -11,7 +11,7 @@
         <img
           [ngStyle]="{ padding: isCollapsed ? '20px 10px' : '0' }"
           [src]="
-            isCollapsed ? '/assets/apexbank-small.svg' : '/assets/apexbank.svg'
+            isCollapsed ? '/assets/logo.svg' : '/assets/logo.svg'
           "
           alt=""
           class="dashboard-scl__layout__slider__logo__icon"
@@ -20,37 +20,43 @@
 
       <ul nz-menu nzMode="inline">
         <li
-          [routerLink]="['user-profile']"
+          [routerLink]="['dashboard']"
           nz-menu-item
           routerLinkActive="ant-menu-item-selected"
         >
           <span nz-icon nzTheme="outline" nzType="unordered-list"></span>
-          <span>Профиль пользователя</span>
+          <span>
+            Главная
+          </span>
         </li>
         <li
-          [routerLink]="['loan-portfolio']"
+          [routerLink]="['documents']"
           nz-menu-item
           routerLinkActive="ant-menu-item-selected"
         >
           <span nz-icon nzTheme="outline" nzType="unordered-list"></span>
-          <span>Кредитный портфель</span>
+          <span>
+            Документы
+          </span>
         </li>
         <li
-          [routerLink]="['reports']"
+          [routerLink]="['settings']"
           nz-menu-item
           routerLinkActive="ant-menu-item-selected"
         >
           <span nz-icon nzTheme="outline" nzType="unordered-list"></span>
-          <span>Отчеты</span>
+          <span>
+            Настройки
+          </span>
         </li>
-        <li
-          [nzDisabled]="true"
-          nz-menu-item
-          routerLinkActive="ant-menu-item-selected"
-        >
-          <span nz-icon nzTheme="outline" nzType="unordered-list"></span>
-          <span>Администратор</span>
-        </li>
+        <!--        <li-->
+        <!--          [nzDisabled]="true"-->
+        <!--          nz-menu-item-->
+        <!--          routerLinkActive="ant-menu-item-selected"-->
+        <!--        >-->
+        <!--          <span nz-icon nzTheme="outline" nzType="unordered-list"></span>-->
+        <!--          <span>Администратор</span>-->
+        <!--        </li>-->
       </ul>
     </nz-sider>
     <nz-layout>
@@ -60,7 +66,7 @@
           [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
           class="trigger"
           nz-icon
-          style="color: #e44b28"
+          style="color: #00b1ff"
         ></span>
       </nz-header>
       <nz-content>

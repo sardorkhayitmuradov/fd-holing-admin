@@ -12,7 +12,7 @@ import { NzMenuModule } from "ng-zorro-antd/menu";
 import { NzSliderModule } from "ng-zorro-antd/slider";
 
 @Component({
-  selector: "cc-dashboard-soft-collection-layout",
+  selector: "fd-dashboard-layout",
   standalone: true,
   imports: [
     CommonModule,
@@ -26,9 +26,9 @@ import { NzSliderModule } from "ng-zorro-antd/slider";
     NzMenuModule,
     RouterOutlet,
   ],
-  templateUrl: "./dashboard-soft-collection-layout.component.html",
-  styleUrl: "./dashboard-soft-collection-layout.component.scss",
+  templateUrl: "./dashboard-layout.component.html",
+  styleUrl: "./dashboard-layout.component.scss",
 })
-export class DashboardSoftCollectionLayoutComponent {
+export class DashboardLayoutComponent {
   public isCollapsed = false;
 }

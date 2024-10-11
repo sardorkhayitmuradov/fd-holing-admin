@@ -1,0 +1,95 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*"],
+  "plugins": [
+    "simple-import-sort"
+  ],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": ["warn"],
+        "@typescript-eslint/no-extra-parens": ["error"],
+        "no-unused-vars": "off",
+        "@typescript-eslint/adjacent-overload-signatures": "off",
+        "@typescript-eslint/no-unused-vars": ["warn"],
+        "@typescript-eslint/explicit-function-return-type": ["error"],
+        "@typescript-eslint/no-inferrable-types": ["warn"],
+        "no-useless-constructor": "off",
+        "@typescript-eslint/no-useless-constructor": ["error"],
+        "@typescript-eslint/indent": ["warn", 2],
+        "@typescript-eslint/explicit-member-accessibility": ["error"],
+        "@typescript-eslint/member-ordering": ["error"],
+        "no-var": ["error"],
+        "no-console": "warn",
+        "simple-import-sort/imports": [
+          "warn",
+          {
+            "groups": [
+              ["^@angular\/.+"],
+              ["^(?!(@core|@shared|@app|environments|\\.\\/|\\.\\.\\/)).*$"],
+              ["(^(@core|@shared|environments|src|assets|~|@app|@env)\/.*$)|(^environments$)"],
+              [".*"]
+            ]
+          }
+        ],
+        "object-curly-spacing": ["warn", "always"],
+        "comma-spacing": ["warn", { "before": false, "after": true }],
+        "no-multiple-empty-lines": ["warn", { "max": 1, "maxEOF": 1 }],
+        "padding-line-between-statements": [
+          "warn",
+          {
+            "blankLine": "always",
+            "prev": ["const", "let", "var"],
+            "next": "*"
+          },
+          {
+            "blankLine": "any",
+            "prev": ["const", "let", "var"],
+            "next": ["const", "let", "var"]
+          },
+          {
+            "blankLine": "always",
+            "prev": "*",
+            "next": "return"
+          },
+          {
+            "blankLine": "always",
+            "prev": "block-like",
+            "next": "*"
+          }
+        ],
+        "lines-between-class-members": ["warn", "always", { "exceptAfterSingleLine": true }],
+        "newline-before-return": "warn",
+        "newline-after-var": "warn",
+        "vars-on-top": "warn",
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "style": "kebab-case"
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "rules": {}
+    }
+  ]
+}
