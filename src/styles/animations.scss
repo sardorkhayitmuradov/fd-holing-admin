@@ -1,0 +1,157 @@
+@use 'sass:color';
+
+@mixin gradient-animation($fromColor, $toColor) {
+  @include -util-gradient-animation(0%, $fromColor, $toColor);
+  @include -util-gradient-animation(10%, $fromColor, $toColor);
+  @include -util-gradient-animation(20%, $fromColor, $toColor);
+  @include -util-gradient-animation(30%, $fromColor, $toColor);
+  @include -util-gradient-animation(40%, $fromColor, $toColor);
+  @include -util-gradient-animation(50%, $fromColor, $toColor);
+  @include -util-gradient-animation(60%, $fromColor, $toColor);
+  @include -util-gradient-animation(70%, $fromColor, $toColor);
+  @include -util-gradient-animation(80%, $fromColor, $toColor);
+  @include -util-gradient-animation(90%, $fromColor, $toColor);
+}
+
+@mixin -util-gradient-animation($startingNumber, $fromColor, $targetColor) {
+  #{$startingNumber} {
+    background: $targetColor linear-gradient(90deg,
+      #{rgba($fromColor, (100% - $startingNumber))} 0%,
+      #{rgba($fromColor, (100% - $startingNumber))} calc(50% - $startingNumber / 2),
+      #{rgba($targetColor, (100% - $startingNumber))} 50%,
+      #{rgba($fromColor, (100% - $startingNumber))} calc(50% + $startingNumber / 2),
+      #{rgba($fromColor, (100% - $startingNumber))} 100%
+    );
+  }
+
+  #{$startingNumber + 2} {
+    background: $targetColor linear-gradient(90deg,
+      #{rgba($fromColor, (100% - $startingNumber - 2%))} 0%,
+      #{rgba($fromColor, (100% - $startingNumber - 2%))} calc(49% - $startingNumber / 2),
+      #{rgba($targetColor, (100% - $startingNumber - 2%))} 50%,
+      #{rgba($fromColor, (100% - $startingNumber - 2%))} calc(51% + $startingNumber / 2),
+      #{rgba($fromColor, (100% - $startingNumber - 2%))} 100%
+    );
+  }
+
+  #{$startingNumber + 4} {
+    background: $targetColor linear-gradient(90deg,
+      #{rgba($fromColor, (100% - $startingNumber - 4%))} 0%,
+      #{rgba($fromColor, (100% - $startingNumber - 4%))} calc(48% - $startingNumber / 2),
+      #{rgba($targetColor, (100% - $startingNumber - 4%))} 50%,
+      #{rgba($fromColor, (100% - $startingNumber - 4%))} calc(52% + $startingNumber / 2),
+      #{rgba($fromColor, (100% - $startingNumber - 4%))} 100%
+    );
+  }
+
+  #{$startingNumber + 6} {
+    background: $targetColor linear-gradient(90deg,
+      #{rgba($fromColor, (100% - $startingNumber - 6%))} 0%,
+      #{rgba($fromColor, (100% - $startingNumber - 6%))} calc(47% - $startingNumber / 2),
+      #{rgba($targetColor, (100% - $startingNumber - 6%))} 50%,
+      #{rgba($fromColor, (100% - $startingNumber - 6%))} calc(53% + $startingNumber / 2),
+      #{rgba($fromColor, (100% - $startingNumber - 6%))} 100%
+    );
+  }
+
+  #{$startingNumber + 8} {
+    background: $targetColor linear-gradient(90deg,
+      #{rgba($fromColor, (100% - $startingNumber - 8%))} 0%,
+      #{rgba($fromColor, (100% - $startingNumber - 8%))} calc(46% - $startingNumber / 2),
+      #{rgba($targetColor, (100% - $startingNumber - 8%))} 50%,
+      #{rgba($fromColor, (100% - $startingNumber - 8%))} calc(54% + $startingNumber / 2),
+      #{rgba($fromColor, (100% - $startingNumber - 8%))} 100%);
+  }
+
+  #{$startingNumber + 10} {
+    background: $targetColor linear-gradient(90deg,
+      #{rgba($fromColor, (100% - $startingNumber - 10%))} 0%,
+      #{rgba($fromColor, (100% - $startingNumber - 10%))} calc(45% - $startingNumber / 2),
+      rgba($targetColor , (100% - $startingNumber - 10%)) 50%,
+      #{rgba($fromColor, (100% - $startingNumber - 10%))} calc(55% + $startingNumber / 2),
+      #{rgba($fromColor, (100% - $startingNumber - 10%))} 100%);
+  }
+}
+
+
+@mixin circle-gradient-animation($fromColor, $toColor) {
+  @include -util-circle-gradient-animation(0%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation(10%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation(20%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation(30%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation(40%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation(50%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation(60%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation(70%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation(80%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation(90%, $fromColor, $toColor);
+}
+
+@mixin circle-gradient-animation-reverse($fromColor, $toColor) {
+  @include -util-circle-gradient-animation-reverse(0%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation-reverse(10%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation-reverse(20%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation-reverse(30%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation-reverse(40%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation-reverse(50%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation-reverse(60%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation-reverse(70%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation-reverse(80%, $fromColor, $toColor);
+  @include -util-circle-gradient-animation-reverse(90%, $fromColor, $toColor);
+}
+
+@mixin -util-circle-gradient-animation($startingNumber, $fromColor, $targetColor) {
+  #{$startingNumber} {
+    @include -util-circle-gradient-animation-fragment($startingNumber, $fromColor, $targetColor)
+  }
+
+  #{$startingNumber + 2} {
+    @include -util-circle-gradient-animation-fragment($startingNumber + 2, $fromColor, $targetColor)
+  }
+
+  #{$startingNumber + 4} {
+    @include -util-circle-gradient-animation-fragment($startingNumber + 4, $fromColor, $targetColor)
+  }
+
+  #{$startingNumber + 6} {
+    @include -util-circle-gradient-animation-fragment($startingNumber + 6, $fromColor, $targetColor)
+  }
+
+  #{$startingNumber + 8} {
+    @include -util-circle-gradient-animation-fragment($startingNumber + 8, $fromColor, $targetColor)
+  }
+
+  #{$startingNumber + 10} {
+    @include -util-circle-gradient-animation-fragment($startingNumber + 10, $fromColor, $targetColor)
+  }
+}
+
+@mixin -util-circle-gradient-animation-reverse($startingNumber, $fromColor, $targetColor) {
+  #{$startingNumber} {
+    @include -util-circle-gradient-animation-fragment(100 - $startingNumber, $fromColor, $targetColor)
+  }
+
+  #{$startingNumber + 2} {
+    @include -util-circle-gradient-animation-fragment(98 - $startingNumber, $fromColor, $targetColor)
+  }
+
+  #{$startingNumber + 4} {
+    @include -util-circle-gradient-animation-fragment(96 - $startingNumber, $fromColor, $targetColor)
+  }
+
+  #{$startingNumber + 6} {
+    @include -util-circle-gradient-animation-fragment(94 - $startingNumber, $fromColor, $targetColor)
+  }
+
+  #{$startingNumber + 8} {
+    @include -util-circle-gradient-animation-fragment(92 - $startingNumber, $fromColor, $targetColor)
+  }
+
+  #{$startingNumber + 10} {
+    @include -util-circle-gradient-animation-fragment(90 - $startingNumber, $fromColor, $targetColor)
+  }
+}
+
+@mixin -util-circle-gradient-animation-fragment($number, $fromColor, $targetColor) {
+  background: $targetColor radial-gradient(circle, color.mix($targetColor, $fromColor, $number) $number, $fromColor $number, $fromColor 100%);
+}

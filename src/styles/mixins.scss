@@ -1,0 +1,49 @@
+@use 'sass:color';
+@use "sass:math";
+
+@mixin flex($align-items: flex-start, $justify-content: flex-start, $gap: 0) {
+  $flex: flex;
+
+  display: $flex;
+  flex-direction: row;
+  align-items: $align-items;
+  justify-content: $justify-content;
+  gap: $gap;
+}
+
+@mixin flex-column($align-items: flex-start, $justify-content: flex-start, $gap: 0) {
+  @include flex($align-items, $justify-content, $gap);
+
+  flex-direction: column;
+}
+
+@mixin flex-column-reverse($align-items: flex-start, $justify-content: flex-start, $gap: 0) {
+  @include flex($align-items, $justify-content, $gap);
+
+  flex-direction: column-reverse;
+}
+
+@mixin flex-wrap($align-items: flex-start, $justify-content: flex-start, $gap: 0) {
+  @include flex($align-items, $justify-content, $gap);
+
+  flex-flow: row wrap;
+}
+
+@mixin recolor($color: #000, $opacity: 1) {
+  $r: calc(color.red($color) / 255);
+  $g: calc(color.green($color) / 255);
+  $b: calc(color.blue($color) / 255);
+  $a: $opacity;
+  $lightness: color.lightness($color);
+
+  stroke: rgba($r * 255, $g * 255, $b * 255, $a);
+  filter: saturate(0%) brightness(0%) invert($lightness) opacity($opacity);
+
+  $svg-filter-id: "recolor";
+
+  filter: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg"><filter id="#{$svg-filter-id}" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 #{$r} 0 0 0 0 #{$g} 0 0 0 0 #{$b} 0 0 0 #{$a} 0"/></filter></svg>##{$svg-filter-id}');
+
+  svg {
+    stroke: rgba($r * 255, $g * 255, $b * 255, $a);
+  }
+}
