@@ -1,0 +1,57 @@
+{
+    "/api/auth/*": {
+      "target": "http://localhost:4200/auth-app",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug",
+      "pathRewrite": {
+        "^/api/auth": "/"
+      }
+    },
+    "/api/payment-info/*": {
+      "target": "http://localhost:4200/api/payment-info",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug",
+      "pathRewrite": {
+        "^/api/payment-info": "/"
+      }
+    },
+    "/api/service/*": {
+      "target": "http://localhost:4200/",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug",
+      "pathRewrite": {
+        "^/api/service": "/api/service"
+      }
+    },
+    "/api/deposits/*": {
+      "target": "http://localhost:4200/deposit-gateway",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug",
+      "pathRewrite": {
+        "^/api/deposits": "/"
+      }
+    },
+    "/audit-log-manager/*": {
+      "target": "http://localhost:4200/audit-log-manager",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug",
+      "pathRewrite": {
+        "^/audit-log-manager": "/"
+      }
+    },
+    "/api/admin/*": {
+      "target": "http://localhost:4200/api/admin",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug",
+      "pathRewrite": {
+        "^/api/admin": "/"
+      }
+    }
+  }
+  
