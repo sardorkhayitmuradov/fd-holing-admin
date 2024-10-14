@@ -1,8 +1,41 @@
-<nz-result nzStatus="warning" nzTitle="Эта страница находится в разработке!"
-           style="height: 500px !important; display: flex; flex-direction: column; justify-content: center">
-  <div nz-result-extra style="margin: 0 auto 0">
-    <button nz-button nzType="primary" routerLink="/soft-collection/user-profile" style="margin: 40px auto 0">Перейти на
-      главную
-    </button>
-  </div>
-</nz-result>
+<div class="qrCode" id="download">
+  <nz-qrcode (click)="downloadQrCode()" [nzStatus]="isQrCodeLoading ? 'loading': 'active'"
+             nzValue="https://ng.ant.design/">
+
+    <button (click)="downloadQrCode()" nz-button nzType="primary">Download</button>
+
+  </nz-qrcode>
+  <a #download></a>
+</div>
+
+<div class="document__uploads">
+  <nz-upload
+    (nzChange)="handleUploadOriginalChange($event)"
+    [nzMultiple]="true"
+    nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+    nzType="drag"
+  >
+    <p class="ant-upload-drag-icon">
+      <span nz-icon nzType="inbox"></span>
+    </p>
+    <p class="ant-upload-text">Click or drag file to this area to upload</p>
+    <p class="ant-upload-hint">
+      Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
+    </p>
+  </nz-upload>
+
+  <nz-upload
+    (nzChange)="handleUploadTranslatedChange($event)"
+    [nzMultiple]="true"
+    nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+    nzType="drag"
+  >
+    <p class="ant-upload-drag-icon">
+      <span nz-icon nzType="inbox"></span>
+    </p>
+    <p class="ant-upload-text">Click or drag file to this area to upload</p>
+    <p class="ant-upload-hint">
+      Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
+    </p>
+  </nz-upload>
+</div>

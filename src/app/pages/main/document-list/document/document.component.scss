@@ -1,0 +1,21 @@
+@import 'styles';
+
+:host {
+  div {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  nz-qrcode {
+    margin-bottom: 12px;
+  }
+
+  .document {
+
+    &__uploads {
+      @include flex(center, space-between, 20px)
+    }
+  }
+}
+
