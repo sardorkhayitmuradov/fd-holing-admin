@@ -49,15 +49,19 @@
             Настройки
           </span>
         </li>
-        <!--        <li-->
-        <!--          [nzDisabled]="true"-->
-        <!--          nz-menu-item-->
-        <!--          routerLinkActive="ant-menu-item-selected"-->
-        <!--        >-->
-        <!--          <span nz-icon nzTheme="outline" nzType="unordered-list"></span>-->
-        <!--          <span>Администратор</span>-->
-        <!--        </li>-->
+        <li
+          (click)="handleLogOut()"
+          nz-menu-item
+          routerLinkActive="ant-menu-item-selected"
+          style="position: absolute; bottom: 0; width: 100%; padding: 40px; border-top: 1px solid #f0f0f0;"
+        >
+          <span nz-icon nzTheme="outline" nzType="logout"></span>
+          <span>
+              Выйти
+          </span>
+        </li>
       </ul>
+
     </nz-sider>
     <nz-layout>
       <nz-header>
