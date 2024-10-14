@@ -1,1 +1,57 @@
-<p>document-list works!</p>
+<div class="document">
+    <button class="document__add" nz-button (click)="showAddDocumentModal()" nzType="default">Добавить</button>
+
+    <nz-table class="document__table" #sortTable [nzBordered]="true" [nzLoading]="isLoadingTable" [nzData]="listOfData"
+        nzTableLayout="fixed" nzShowSizeChanger>
+        <thead>
+            <tr>
+                <th>
+                    Заголовок
+                </th>
+                <th>
+                    Оригинал
+                </th>
+                <th>
+                    Переведено
+                </th>
+                <th nzWidth="150px">
+                    Дата создания
+                </th>
+                <th nzWidth="250px">
+                </th>
+            </tr>
+        </thead>
+        <tbody class="document__table__tbody">
+            @for (data of sortTable.data; track data) {
+            <tr>
+                <td>{{ data.title | textMask: 20 }}</td>
+                <td>{{ data.original | textMask: 20 }}.pdf</td>
+                <td>{{ data.translated | textMask: 20 }}.pdf</td>
+                <td>{{ data.createdDate | date: "dd.MM.YYYY" }}</td>
+                <td class="document__table__tbody__td">
+                    <div class="document__table__tbody__td__action">
+                        <nz-tag style="cursor: pointer;" [routerLink]="['/admin/documents', data.id]">Смотреть</nz-tag>
+                        <nz-tag style="cursor: pointer;" [nzColor]="'cyan'" (click)="downloadDocument()">Скачать</nz-tag>
+                        <nz-tag style="cursor: pointer;" [nzColor]="'volcano'" (click)="deleteDocument(data.id)">Удалить</nz-tag>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </nz-table>
+</div>
+
+<nz-modal [(nzVisible)]="isVisibleAddDocumentModal" nzTitle="Название документа" nzCentered
+    (nzOnCancel)="handleCancelDocumentModal()" (nzOnOk)="handleOkDocumentModal()">
+    <ng-container *nzModalContent>
+        <form [formGroup]="addDocumentForm">
+            <nz-input-group [nzSuffix]="suffixTemplateInfo" nzAddOnAfter=".pdf">
+                <input type="text" nz-input formControlName="title" />
+            </nz-input-group>
+    
+            <ng-template #suffixTemplateInfo>
+                <span nz-icon nz-tooltip nzTooltipTitle="Название документа должно быть указано!" nzType="info-circle"></span>
+            </ng-template>
+        </form>
+    </ng-container>
+</nz-modal>

@@ -1,0 +1,23 @@
+@import 'styles';
+
+:host { 
+    .document {
+        @include flex-column(start, start, 20px);
+
+        &__add {
+            margin-left: auto;
+        }
+
+        &__table {
+            &__tbody {
+
+                &__td {
+
+                    &__action {
+                        @include flex(center, center, 8px)
+                    }
+                }
+            }
+        }
+    }
+}

@@ -79,6 +79,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "buildTarget": "fd-holding-admin:build:production"
@@ -121,5 +124,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "94658749-e18b-4ad7-a8a2-31151cb5e39a"
   }
 }
