@@ -1,21 +1,37 @@
 @import 'styles';
 
 :host {
-  div {
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-  }
+  .qrCode {
+    @include flex-column(center, center, 20px);
+    width: fit-content;
+    margin-bottom: 100px;
 
-  nz-qrcode {
-    margin-bottom: 12px;
-  }
+    &__wrapper {
+      width: fit-content;
+      border: 1px solid #f0f0f0;
+      border-radius: 5px;
 
-  .document {
-
-    &__uploads {
-      @include flex(center, space-between, 20px)
+      &__code {
+        cursor: pointer;
+      }
     }
+  }
+
+  .document__uploads {
+    @include flex(center, space-between, 20px);
+
+    &__item {
+      width: 100% !important;
+      height: 500px !important;
+    }
+  }
+
+}
+
+::ng-deep {
+  .ant-upload.ant-upload-select-picture-card {
+    width: 100% !important;
+    height: 500px !important;
   }
 }
 
