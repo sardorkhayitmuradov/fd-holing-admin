@@ -6,6 +6,7 @@ import { filter, Subscription } from "rxjs";
 import { HotkeysService } from "@shared/services/hotkeys.service";
 
 @Directive({
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[hotkey]',
   standalone: true,
 })

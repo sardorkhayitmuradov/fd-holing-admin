@@ -128,13 +128,11 @@ export class ReactiveDb {
 
     request.onsuccess = (): void => {
       this.db = request.result;
-      console.log('Database opened successfully');
       this.dbReady.next(this.db);
       this.dbReady.complete();
     };
 
     request.onerror = (): void => {
-      console.error('Database error:', request.error);
       this.dbReady.error(request.error);
     };
   }

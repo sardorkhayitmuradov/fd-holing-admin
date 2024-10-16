@@ -16,6 +16,7 @@ import {
   NzInputGroupComponent,
   NzInputGroupWhitSuffixOrPrefixDirective,
 } from 'ng-zorro-antd/input';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalComponent } from 'ng-zorro-antd/modal';
 import { NzResultComponent } from 'ng-zorro-antd/result';
 import { NzTagComponent } from 'ng-zorro-antd/tag';
@@ -23,7 +24,6 @@ import { asapScheduler, Subscription } from 'rxjs';
 
 import { StringOrJsonPipe } from '@shared/pipes/string-or-json.pipe';
 import { FormGroupFrom } from '@shared/types/form-group.types';
-import { NzMessageService } from 'ng-zorro-antd/message';
 
 export interface ILoginForm {
   username: string;
@@ -65,6 +65,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     username: ['Иван Иванович', [Validators.required]],
     password: ['Pass1234_5', [Validators.required]],
   });
+
   private loginSub: Subscription | undefined;
 
   public ngOnInit(): void {

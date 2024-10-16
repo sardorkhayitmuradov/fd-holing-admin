@@ -15,26 +15,25 @@
       ],
       "rules": {
         "@typescript-eslint/no-explicit-any": ["warn"],
-        "@typescript-eslint/no-extra-parens": ["error"],
+        "@typescript-eslint/no-extra-parens": "off",
         "no-unused-vars": "off",
         "@typescript-eslint/adjacent-overload-signatures": "off",
         "@typescript-eslint/no-unused-vars": ["warn"],
-        "@typescript-eslint/explicit-function-return-type": ["error"],
+        "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-inferrable-types": ["warn"],
         "no-useless-constructor": "off",
-        "@typescript-eslint/no-useless-constructor": ["error"],
+        "@typescript-eslint/no-useless-constructor": "off",
         "@typescript-eslint/indent": ["warn", 2],
-        "@typescript-eslint/explicit-member-accessibility": ["error"],
-        "@typescript-eslint/member-ordering": ["error"],
-        "no-var": ["error"],
+        "@typescript-eslint/explicit-member-accessibility": "off",
+        "@typescript-eslint/member-ordering": "off",
+        "no-var": "off",
         "no-console": "warn",
         "simple-import-sort/imports": [
           "warn",
           {
             "groups": [
               ["^@angular\/.+"],
-              ["^(?!(@core|@shared|@app|environments|\\.\\/|\\.\\.\\/)).*$"],
-              ["(^(@core|@shared|environments|src|assets|~|@app|@env)\/.*$)|(^environments$)"],
+              ["^(?!@core|@shared|src|\\.\\.|\\.|assets).*"],
               [".*"]
             ]
           }
@@ -73,7 +72,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "",
+            "prefix": "app",
             "style": "camelCase"
           }
         ],

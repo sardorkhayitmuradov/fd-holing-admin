@@ -4,7 +4,6 @@ import { RouterLink } from "@angular/router";
 import { NzButtonComponent } from "ng-zorro-antd/button";
 import { NzResultComponent } from "ng-zorro-antd/result";
 
-
 @Component({
   selector: 'fd-settings',
   standalone: true,

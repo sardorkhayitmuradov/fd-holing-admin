@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule, NgStyle } from '@angular/common';
-import { MainComponent } from './main.component';
-import { DashboardLayoutComponent } from '../../layouts/dashboard-layout/dashboard-layout.component';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+import { DashboardLayoutComponent } from '../../layouts/dashboard-layout/dashboard-layout.component';
+import { MainComponent } from './main.component';
 
 const routes: Routes = [
   {

@@ -10,7 +10,7 @@ describe('DocumentListComponent', () => {
     await TestBed.configureTestingModule({
       imports: [DocumentListComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(DocumentListComponent);
     component = fixture.componentInstance;

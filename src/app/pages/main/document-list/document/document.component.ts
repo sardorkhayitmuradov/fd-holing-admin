@@ -1,13 +1,13 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { FixMeLater, QRCodeModule } from 'angularx-qrcode';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
-import { NzResultComponent } from 'ng-zorro-antd/result';
-import { NzQRCodeComponent } from 'ng-zorro-antd/qr-code';
-import { NzUploadComponent } from 'ng-zorro-antd/upload';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { FixMeLater, QRCodeModule } from 'angularx-qrcode';
+import { NzQRCodeComponent } from 'ng-zorro-antd/qr-code';
+import { NzResultComponent } from 'ng-zorro-antd/result';
+import { NzUploadComponent } from 'ng-zorro-antd/upload';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @Component({
@@ -39,7 +39,7 @@ export class DocumentComponent {
   public pdfReader = (type: 'translated' | 'original', pdfSrc: File): void => {
     const fileReader = new FileReader();
 
-    fileReader.onload = (e) => {
+    fileReader.onload = (e): void => {
       if (type === 'translated')
         this.translatedPdfSrc = e.target?.result as string;
       if (type === 'original') this.originalPdfSrc = e.target?.result as string;
@@ -53,7 +53,6 @@ export class DocumentComponent {
     type: 'translated' | 'original',
     selectedFile: FixMeLater,
   ): void {
-    console.log(selectedFile.file);
     const isPdf = selectedFile.type === 'application/pdf';
     const isLt2M = selectedFile.size! / 1024 / 1024 < 2;
 
@@ -78,13 +77,12 @@ export class DocumentComponent {
     const parentElement =
       qrCode.qrcElement.nativeElement.querySelector('img').src;
 
-    console.log(parentElement);
-
-    let blobData = this.convertBase64ToBlob(parentElement);
+    const blobData = this.convertBase64ToBlob(parentElement);
     // saves as image
     const blob = new Blob([blobData], { type: 'image/png' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
+
     link.href = url;
     // name of the file
     link.download = 'angularx-qrcode';
@@ -92,7 +90,7 @@ export class DocumentComponent {
     link.click();
   }
 
-  private convertBase64ToBlob(Base64Image: string) {
+  private convertBase64ToBlob(Base64Image: string): Blob {
     // split into two parts
     const parts = Base64Image.split(';base64,');
     // hold the content type
@@ -101,10 +99,13 @@ export class DocumentComponent {
     const decodedData = window.atob(parts[1]);
     // create unit8array of size same as row data length
     const uInt8Array = new Uint8Array(decodedData.length);
+
     // insert all character code into uint8array
+
     for (let i = 0; i < decodedData.length; ++i) {
       uInt8Array[i] = decodedData.charCodeAt(i);
     }
+
     // return blob image after conversion
     return new Blob([uInt8Array], { type: imageType });
   }
