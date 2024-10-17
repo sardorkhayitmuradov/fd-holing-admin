@@ -9,7 +9,6 @@
     "test": "ng test",
     "lint": "ng lint",
     "lint:fix": "eslint --fix . --ext .ts src",
-    "prepare": "husky",
     "clearcache": "rm -rf .\\.angular\\ && rm -rf node_modules\\ && npm cache clean --force && npm install"
   },
   "private": true,
@@ -55,10 +54,5 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.5.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "eslint:fix"
-    }
   }
 }
