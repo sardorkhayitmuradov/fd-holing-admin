@@ -1,6 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormGroup, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  Validators,
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { UnsubscribeDirective } from '@app/shared/directives/unsubscribe.directive';
@@ -11,7 +16,10 @@ import { NzIconDirective, NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalComponent, NzModalContentDirective } from 'ng-zorro-antd/modal';
-import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
+import {
+  NzNotificationModule,
+  NzNotificationService,
+} from 'ng-zorro-antd/notification';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTooltipDirective, NzToolTipModule } from 'ng-zorro-antd/tooltip';
@@ -19,11 +27,18 @@ import { asapScheduler } from 'rxjs';
 
 import { documentList } from './constants/document-list';
 import { DataItem, DocumentAddFrom } from './interface/document-list.interface';
+import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 
 @Component({
   selector: 'fd-document-list',
   standalone: true,
-  imports: [NzTableModule, NzTagModule, DatePipe, NzButtonModule, NzModalComponent,
+  imports: [
+    NzTableModule,
+    NzTagModule,
+    DatePipe,
+    NzButtonModule,
+    NzModalComponent,
     NzModalContentDirective,
     NzInputModule,
     ReactiveFormsModule,
@@ -34,30 +49,43 @@ import { DataItem, DocumentAddFrom } from './interface/document-list.interface';
     NzNotificationModule,
     NzFormModule,
     TextMaskPipe,
-    RouterLink
+    RouterLink,
+    NzDropdownMenuComponent,
+    NzDatePickerComponent,
   ],
   templateUrl: './document-list.component.html',
-  styleUrl: './document-list.component.scss'
+  styleUrl: './document-list.component.scss',
 })
-export class DocumentListComponent extends UnsubscribeDirective implements OnInit {
+export class DocumentListComponent
+  extends UnsubscribeDirective
+  implements OnInit
+{
   public randomId = 3243;
   public isLoadingTable = false;
   public isVisibleAddDocumentModal = false;
-  
+
   public addDocumentForm!: FormGroup;
-  
+  public searchDocumentByField!: FormGroup;
+
+  public searchDocumentByFieldVisible = {
+    documentName: false,
+    documentId: false,
+    createdDate: false,
+    title: false,
+  };
+
   public listOfData: DataItem[] = documentList;
 
   public readonly message = inject(NzMessageService);
-  public readonly notification = inject(NzNotificationService)
+  public readonly notification = inject(NzNotificationService);
   private readonly _formBuilder = inject(UntypedFormBuilder);
 
   public constructor() {
-    super()
+    super();
   }
 
   public ngOnInit(): void {
-    this.initForm()
+    this.initForm();
   }
 
   public showAddDocumentModal(): void {
@@ -70,34 +98,40 @@ export class DocumentListComponent extends UnsubscribeDirective implements OnIni
     this.isLoadingTable = true;
     this.isVisibleAddDocumentModal = false;
 
-    if(this.addDocumentForm.invalid) return;
-  
+    if (this.addDocumentForm.invalid) return;
+
     asapScheduler.schedule((): void => {
       this.isLoadingTable = false;
 
-      this.message.success("Вы успешно добавили документ!", {
+      this.message.success('Вы успешно добавили документ!', {
         nzDuration: 3000,
       });
 
       this.listOfData = [
-        { id:`${this.randomId}`, title: formValues?.title, original: formValues?.title, translated: formValues?.title, createdDate: new Date() },
+        {
+          id: `${this.randomId}`,
+          title: formValues?.title,
+          document: 'No document',
+          createdDate: new Date(),
+        },
         ...this.listOfData,
-      ]
+      ];
     }, 2000);
-
   }
 
   public deleteDocument(id: string): void {
     this.isLoadingTable = true;
-    this.listOfData = this.listOfData.filter(document => document.id !== id);
+    this.listOfData = this.listOfData.filter((document) => document.id !== id);
 
     asapScheduler.schedule((): void => {
       this.isLoadingTable = false;
 
-      this.message.success("Вы успешно удалили документ, показанный в таблице!", {
-        nzDuration: 1000,
-      });
-
+      this.message.success(
+        'Вы успешно удалили документ, показанный в таблице!',
+        {
+          nzDuration: 1000,
+        },
+      );
     }, 500);
   }
 
@@ -115,21 +149,34 @@ export class DocumentListComponent extends UnsubscribeDirective implements OnIni
     this.notification.error(
       'Данный загружаемый PDF-файл находится в разработке!',
       'Пожалуйста, ознакомьтесь с другими услугами, представленными на сайте!',
-      { nzDuration: 0,
+      {
+        nzDuration: 0,
         nzStyle: {
           width: '600px',
         },
-        nzClass: 'test-class'
-      }
+        nzClass: 'test-class',
+      },
     );
   }
+
+  public reset(): void {
+    this.search();
+  }
+
+  public search(): void {}
 
   // form
 
   private initForm(): void {
     this.addDocumentForm = this._formBuilder.nonNullable.group({
-      title: ["Случайное название", Validators.required],
+      title: ['Случайное название', Validators.required],
+    });
+
+    this.searchDocumentByField = this._formBuilder.nonNullable.group({
+      documentName: [''],
+      documentId: [''],
+      createdDate: [''],
+      title: [''],
     });
   }
-
 }

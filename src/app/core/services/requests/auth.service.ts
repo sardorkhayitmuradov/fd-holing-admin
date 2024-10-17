@@ -25,16 +25,13 @@ export class AuthService {
     return this._http
       .post(ENDPOINTS.auth.api, ENDPOINTS.auth.endpoints.login, loginBody)
       .pipe(
-        switchMap(
-          (response: IResponse<ILoginResponse>): Observable<ILoginResponse> => {
-            if (response.data?.access_token)
-              this._accessTokenStorageService.setItem(
-                response.data.access_token,
-              );
+        switchMap((response: IResponse<ILoginResponse>) => {
+          if (response.data?.access_token) {
+            this._accessTokenStorageService.setItem(response.data.access_token);
+          }
 
-            return of(response);
-          },
-        ),
+          return of(response.data);
+        }),
       );
   }
 

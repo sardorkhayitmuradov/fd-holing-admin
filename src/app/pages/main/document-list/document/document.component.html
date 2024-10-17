@@ -31,68 +31,22 @@
 
   <button
     (click)="save()"
+    [disabled]="!pdfSrc"
     class="qrCode__btn"
-    disabled
     nz-button
     nzType="primary"
     style="margin-top: 20px;"
   >
-    Сохранять
+    Сохранить
   </button>
 </div>
 
 <div class="document__uploads">
   <div class="document__uploads__item">
     <button
-      (click)="deleteSelectedPdf('translated')"
-      [disabled]="!translatedPdfSrc"
-      [nzDanger]="translatedPdfSrc"
-      class="document__uploads__item__btn"
-      nz-button
-      nzType="primary"
-    >
-      Удалить файл
-    </button>
-    @if (!translatedPdfSrc) {
-      <nz-upload
-        (nzChange)="onUploadChange('translated', $event)"
-        [nzShowUploadList]="false"
-        class="document__uploads__item__uploader"
-        nzListType="picture-card"
-      >
-          <span
-            class="upload-icon"
-            style="margin-right: 10px"
-            nz-icon
-            [nzType]="loading ? 'loading' : 'plus'"
-          ></span>
-        <div class="ant-upload-text">Загружайте только переведенный PDF-файл!</div>
-      </nz-upload>
-    } @else {
-
-      <pdf-viewer
-        [src]="translatedPdfSrc"
-        [rotation]="0"
-        [original-size]="false"
-        [show-all]="true"
-        [fit-to-page]="false"
-        [zoom]="1"
-        [zoom-scale]="'page-fit'"
-        [stick-to-page]="false"
-        [render-text]="true"
-        [external-link-target]="'blank'"
-        [autoresize]="false"
-        [show-borders]="true"
-        style="width: 100%; height: 500px; margin: 0 auto;"
-      ></pdf-viewer>
-    }
-  </div>
-
-  <div class="document__uploads__item">
-    <button
-      (click)="deleteSelectedPdf('original')"
-      [disabled]="!originalPdfSrc"
-      [nzDanger]="originalPdfSrc"
+      (click)="deleteSelectedPdf()"
+      [disabled]="!pdfSrc"
+      [nzDanger]="pdfSrc"
       class="document__uploads__item__btn"
       nz-button
       nzType="primary"
@@ -100,10 +54,11 @@
       Удалить файл
     </button>
 
-    @if (!originalPdfSrc) {
+    @if (!pdfSrc) {
       <nz-upload
-        (nzChange)="onUploadChange('original',$event)"
         [nzShowUploadList]="false"
+        [nzBeforeUpload]="beforeUpload"
+        [nzAccept]="'application/pdf'"
         class="document__uploads__item__uploader"
         nzListType="picture-card"
       >
@@ -113,11 +68,11 @@
           nz-icon
           [nzType]="loading ? 'loading' : 'plus'"
         ></span>
-        <div class="ant-upload-text">Загружайте только оригинальный PDF-файл!</div>
+        <div class="ant-upload-text">Загрузить только PDF-файл!</div>
       </nz-upload>
     } @else {
       <pdf-viewer
-        [src]="originalPdfSrc"
+        [src]="pdfSrc"
         [rotation]="0"
         [original-size]="false"
         [show-all]="true"
@@ -129,7 +84,7 @@
         [external-link-target]="'blank'"
         [autoresize]="false"
         [show-borders]="true"
-        style="width: 100%; height: 500px; margin: 0 auto;"
+        style="width: 100%; height: 500px; margin: 0 auto; border: 1px solid #f0f0f0;"
       ></pdf-viewer>
     }
   </div>

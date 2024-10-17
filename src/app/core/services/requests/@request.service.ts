@@ -1,5 +1,5 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 
 import {
   MonoTypeOperatorFunction,
@@ -7,29 +7,30 @@ import {
   tap,
   timeout,
   TimeoutError,
-} from "rxjs";
+} from 'rxjs';
+import { ILoginResponse } from '@app/core/interfaces/auth/login-response.interface';
 
 export interface IRequestOptions {
   headers?: {
     [header: string]: string | string[];
   };
-  observe?: "body";
+  observe?: 'body';
   params?:
-  | HttpParams
-  | {
-    [param: string]:
-    | string
-    | number
-    | boolean
-    | ReadonlyArray<string | number | boolean>;
-  };
+    | HttpParams
+    | {
+        [param: string]:
+          | string
+          | number
+          | boolean
+          | ReadonlyArray<string | number | boolean>;
+      };
   reportProgress?: boolean;
-  responseType?: "json";
+  responseType?: 'json';
   withCredentials?: boolean;
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class RequestService {
   private readonly _http = inject(HttpClient);
@@ -38,15 +39,15 @@ export class RequestService {
     api: string,
     url: string,
     params?:
-    | HttpParams
-    | {
-      [param: string]:
-      | string
-      | number
-      | boolean
-      | ReadonlyArray<string | number | boolean>;
-    },
-    options?: IRequestOptions
+      | HttpParams
+      | {
+          [param: string]:
+            | string
+            | number
+            | boolean
+            | ReadonlyArray<string | number | boolean>;
+        },
+    options?: IRequestOptions,
   ): Observable<T> {
     return this._http
       .get<T>(`${api}/${url}`, { ...options, params })
@@ -56,8 +57,8 @@ export class RequestService {
   public post<T>(
     api: string,
     url: string,
-    body?: unknown,
-    options?: IRequestOptions
+    body?: ILoginResponse,
+    options?: IRequestOptions,
   ): Observable<T> {
     return this._http
       .post<T>(`${api}/${url}`, body, options)
@@ -68,7 +69,7 @@ export class RequestService {
     api: string,
     url: string,
     body?: unknown,
-    options?: IRequestOptions
+    options?: IRequestOptions,
   ): Observable<T> {
     return this._http
       .put<T>(`${api}/${url}`, body, options)
@@ -80,7 +81,7 @@ export class RequestService {
     url: string,
     body?: unknown,
     id?: string,
-    options?: IRequestOptions
+    options?: IRequestOptions,
   ): Observable<T> {
     return this._http
       .patch<T>(`${api}/${url}${id}`, body, options)
@@ -90,7 +91,7 @@ export class RequestService {
   public delete<T>(
     api: string,
     url: string,
-    options?: IRequestOptions
+    options?: IRequestOptions,
   ): Observable<T> {
     return this._http
       .delete<T>(`${api}/${url}`, options)
@@ -99,7 +100,7 @@ export class RequestService {
 
   private getCommonPipes<T>(): [
     MonoTypeOperatorFunction<T>,
-    MonoTypeOperatorFunction<T>
+    MonoTypeOperatorFunction<T>,
   ] {
     return [
       timeout<T>(15_000),
@@ -110,11 +111,15 @@ export class RequestService {
           if (error instanceof TimeoutError) return;
         },
         next: (response: T | null) => {
-          if (response !== null && typeof response === "object" && "error" in response) {
+          if (
+            response !== null &&
+            typeof response === 'object' &&
+            'error' in response
+          ) {
             // eslint-disable-next-line no-console
             console.error({ error: response.error || null });
           }
-        }        
+        },
       }),
     ];
   }

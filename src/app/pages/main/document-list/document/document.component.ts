@@ -7,9 +7,9 @@ import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzQRCodeComponent } from 'ng-zorro-antd/qr-code';
 import { NzResultComponent } from 'ng-zorro-antd/result';
-import { NzUploadComponent } from 'ng-zorro-antd/upload';
+import { NzUploadComponent, NzUploadFile } from 'ng-zorro-antd/upload';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { asapScheduler } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'fd-document',
@@ -31,63 +31,80 @@ export class DocumentComponent {
   public qrCodeLink = 'https://fd-holding/documents';
   public loading = false;
 
-  public originalPdfSrc: string | undefined = '';
-  public translatedPdfSrc: string | undefined = '';
-  public fileReader = new FileReader();
+  public selectedFile: File | null = null; // Store the selected file
+  public pdfSrc: string | undefined; // Preview the selected PDF
 
   public readonly message = inject(NzMessageService);
   public readonly cdr = inject(ChangeDetectorRef);
+  private readonly http = inject(HttpClient);
 
-  public pdfReader = (type: 'translated' | 'original', pdfSrc: File): void => {
-    if (this.fileReader.readyState === 1) {
-      console.warn('FileReader is busy. Please wait.');
-      return;
-    }
+  // Read PDF for preview (optional)
+  public readPdf(file: File): void {
+    const fileReader = new FileReader();
 
-    this.fileReader.onload = (e): void => {
-      if (type === 'translated') {
-        this.translatedPdfSrc = e.target?.result as string;
-      }
-      if (type === 'original') {
-        this.originalPdfSrc = e.target?.result as string;
-      }
+    fileReader.onload = (e: ProgressEvent<FileReader>) => {
+      this.pdfSrc = e.target?.result as string;
+      this.cdr.detectChanges(); // Update the view after reading the file
     };
 
-    this.fileReader.onerror = (e): void => {
-      console.error('Error reading file');
-    };
+    fileReader.readAsArrayBuffer(file); // Read file as ArrayBuffer for PDF preview
+  }
 
-    this.fileReader.readAsArrayBuffer(pdfSrc);
+  // Custom upload request triggered by the "Save" button
+  public customUploadRequest = (item: File): void => {
+    // This method will be triggered when calling this.fileReader.readAsArrayBuffer()
+    const formData = new FormData();
+    formData.append('file', item as Blob); // Append the file for manual upload
 
-    this.cdr.detectChanges();
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer YOUR_TOKEN', // Replace with your authorization token if needed
+    });
+
+    this.loading = true;
+
+    this.http
+      .post('https://your-backend-endpoint/upload', formData, { headers })
+      .subscribe({
+        next: (response) => {
+          this.loading = false;
+          this.message.success('Файл успешно загружен!');
+        },
+        error: (error) => {
+          this.loading = false;
+          this.message.error('Ошибка при загрузке файла.');
+        },
+      });
   };
 
-  public onUploadChange(
-    type: 'translated' | 'original',
-    selectedFile: FixMeLater,
-  ): void {
-    const isPdf = selectedFile.file.type === 'application/pdf';
-    const isLt2M = selectedFile.file.size! / 1024 / 1024 < 2;
-
-    if (!isPdf) {
-      this.message.error('You can only upload PDF file!');
-
-      return;
-    } else if (!isLt2M) {
-      this.message.error('Image must smaller than 2MB!');
-
+  // Save function that sends the PDF file to the API
+  public save(): void {
+    if (!this.pdfSrc) {
+      this.message.error('No file selected!');
       return;
     }
 
-    asapScheduler.schedule(() => {
-      this.pdfReader(type, selectedFile.file.originFileObj);
-    }, 200);
+    this.customUploadRequest(this.selectedFile as File);
   }
 
-  public deleteSelectedPdf(type: 'translated' | 'original'): void {
-    if (type === 'translated') this.translatedPdfSrc = '';
-    if (type === 'original') this.originalPdfSrc = '';
+  public deleteSelectedPdf(): void {
+    this.pdfSrc = '';
   }
+
+  public beforeUpload = (file: any, fileList: NzUploadFile[]): boolean => {
+    if (file.type !== 'application/pdf') {
+      this.message.error('Вы можете загружать только PDF файлы!');
+      return false;
+    }
+
+    // Store the selected file
+    this.selectedFile = file;
+
+    // Optional: Preview or process the file here
+    this.readPdf(file);
+
+    this.message.success('Файл выбран. Нажмите "Сохранить" для загрузки.');
+    return false; // Prevent automatic upload
+  };
 
   // qr code
   public downloadQrCode(qrCode: FixMeLater): void {
@@ -106,12 +123,6 @@ export class DocumentComponent {
 
     link.click();
   }
-
-  public save(): void {
-    console.log('save');
-  }
-
-  // Save as PDF
 
   private convertBase64ToBlob(Base64Image: string): Blob {
     // split into two parts
