@@ -22,11 +22,11 @@
       <th nzCustomFilter nzWidth="200px">
         ID документа
         <nz-filter-trigger
-          [(nzVisible)]="searchDocumentByFieldVisible.documentId"
+          [(nzVisible)]="searchDocumentIdVisible"
           [nzActive]="
               searchDocumentByField.controls['documentId'].value.length > 0
             "
-          [nzDropdownMenu]="menu"
+          [nzDropdownMenu]="documentId"
         >
           <span nz-icon nzType="search"></span>
         </nz-filter-trigger>
@@ -34,11 +34,11 @@
       <th nzCustomFilter>
         Заголовок
         <nz-filter-trigger
-          [(nzVisible)]="searchDocumentByFieldVisible.title"
+          [(nzVisible)]="searchTitleVisible"
           [nzActive]="
               searchDocumentByField.controls['title'].value.length > 0
             "
-          [nzDropdownMenu]="menu"
+          [nzDropdownMenu]="title"
         >
           <span nz-icon nzType="search"></span>
         </nz-filter-trigger>
@@ -46,11 +46,11 @@
       <th nzCustomFilter>
         Документ
         <nz-filter-trigger
-          [(nzVisible)]="searchDocumentByFieldVisible.documentName"
+          [(nzVisible)]="searchDocumentNameVisible"
           [nzActive]="
               searchDocumentByField.controls['documentName'].value.length > 0
             "
-          [nzDropdownMenu]="menu"
+          [nzDropdownMenu]="documentName"
         >
           <span nz-icon nzType="search"></span>
         </nz-filter-trigger>
@@ -58,11 +58,11 @@
       <th nzCustomFilter nzWidth="200px">
         Дата создания
         <nz-filter-trigger
-          [(nzVisible)]="searchDocumentByFieldVisible.createdDate"
+          [(nzVisible)]="searchCreatedDateVisible"
           [nzActive]="
-              searchDocumentByField.controls['createdDate'].value.length > 0
+              formatDate.length > 0 || false
             "
-          [nzDropdownMenu]="menu"
+          [nzDropdownMenu]="createdDate"
         >
           <span nz-icon nzType="search"></span>
         </nz-filter-trigger>
@@ -71,7 +71,7 @@
     </tr>
     </thead>
     <tbody class="document__table__tbody">
-      @for (data of sortTable.data; track data) {
+      @for (data of sortTable.data; track data.title) {
         <tr>
           <td>{{ data.id }}</td>
           <td>{{ data.title | textMask: 20 }}</td>
@@ -107,76 +107,89 @@
   </nz-table>
 </div>
 
-<nz-dropdown-menu #menu="nzDropdownMenu">
+<nz-dropdown-menu #documentId="nzDropdownMenu">
   <div [formGroup]="searchDocumentByField" class="ant-table-filter-dropdown">
     <div class="search-box">
-      @if (searchDocumentByFieldVisible.documentId) {
-        <input
-          formControlName="documentId"
-          nz-input
-          placeholder="Search documentId"
-          type="text"
-        />
-        <button
-          (click)="search()"
-          class="search-button"
-          nz-button
-          nzSize="default"
-          nzType="primary"
-        >
-          Search
-        </button>
-        <button (click)="reset()" nz-button nzSize="default">Reset</button>
-      }
-      @if (searchDocumentByFieldVisible.title) {
-        <input
-          formControlName="title"
-          nz-input
-          placeholder="Search title"
-          type="text"
-        />
-        <button
-          (click)="search()"
-          class="search-button"
-          nz-button
-          nzSize="default"
-          nzType="primary"
-        >
-          Search
-        </button>
-        <button (click)="reset()" nz-button nzSize="default">Reset</button>
-      }
-      @if (searchDocumentByFieldVisible.createdDate) {
-        <!--        <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="createdDate" nzSize="default"></nz-date-picker>-->
-        <button
-          (click)="search()"
-          class="search-button"
-          nz-button
-          nzSize="default"
-          nzType="primary"
-        >
-          Search
-        </button>
-        <button (click)="reset()" nz-button nzSize="default">Reset</button>
-      }
-      @if (searchDocumentByFieldVisible.documentName) {
-        <input
-          formControlName="documentName"
-          nz-input
-          placeholder="Search documentName"
-          type="text"
-        />
-        <button
-          (click)="search()"
-          class="search-button"
-          nz-button
-          nzSize="default"
-          nzType="primary"
-        >
-          Search
-        </button>
-        <button (click)="reset()" nz-button nzSize="default">Reset</button>
-      }
+      <input
+        formControlName="documentId"
+        nz-input
+        placeholder="По ИД документа"
+        type="text"
+      />
+      <button
+        (click)="search()"
+        class="search-button"
+        nz-button
+        nzSize="default"
+        nzType="primary"
+      >
+        Search
+      </button>
+      <button (click)="reset('documentId')" nz-button nzSize="default">Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>
+
+<nz-dropdown-menu #title="nzDropdownMenu">
+  <div [formGroup]="searchDocumentByField" class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input
+        formControlName="title"
+        nz-input
+        placeholder="По названию"
+        type="text"
+      />
+      <button
+        (click)="search()"
+        class="search-button"
+        nz-button
+        nzSize="default"
+        nzType="primary"
+      >
+        Search
+      </button>
+      <button (click)="reset('title')" nz-button nzSize="default">Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>
+
+<nz-dropdown-menu #createdDate="nzDropdownMenu">
+  <div [formGroup]="searchDocumentByField" class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <nz-date-picker [nzDisabledDate]="disableFutureDates" nzFormat="dd-MM-yyyy" formControlName="createdDate" nzSize="default"></nz-date-picker>
+      <button
+        (click)="search()"
+        class="search-button"
+        nz-button
+        nzSize="default"
+        nzType="primary"
+      >
+        Search
+      </button>
+      <button (click)="reset('createdDate')" nz-button nzSize="default">Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>
+
+<nz-dropdown-menu #documentName="nzDropdownMenu">
+  <div [formGroup]="searchDocumentByField" class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input
+        formControlName="documentName"
+        nz-input
+        placeholder="По документу"
+        type="text"
+      />
+      <button
+        (click)="search()"
+        class="search-button"
+        nz-button
+        nzSize="default"
+        nzType="primary"
+      >
+        Search
+      </button>
+      <button (click)="reset('documentName')" nz-button nzSize="default">Reset</button>
     </div>
   </div>
 </nz-dropdown-menu>

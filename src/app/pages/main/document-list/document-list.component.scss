@@ -24,6 +24,14 @@
 }
 
 .ant-table-filter-dropdown {
+  position: relative;
+
+  nz-date-picker {
+    width: 188px;
+    display: block;
+    margin: 0 8px 12px 0;
+  }
+
   .search-box {
     padding: 8px;
   }

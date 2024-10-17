@@ -8,9 +8,10 @@ import {
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-import { UnsubscribeDirective } from '@app/shared/directives/unsubscribe.directive';
-import { TextMaskPipe } from '@app/shared/pipes/text-mask.pipe';
+import moment from "moment";
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconDirective, NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -25,10 +26,11 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTooltipDirective, NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { asapScheduler } from 'rxjs';
 
+import { UnsubscribeDirective } from '@app/shared/directives/unsubscribe.directive';
+import { TextMaskPipe } from '@app/shared/pipes/text-mask.pipe';
+
 import { documentList } from './constants/document-list';
 import { DataItem, DocumentAddFrom } from './interface/document-list.interface';
-import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 
 @Component({
   selector: 'fd-document-list',
@@ -67,12 +69,10 @@ export class DocumentListComponent
   public addDocumentForm!: FormGroup;
   public searchDocumentByField!: FormGroup;
 
-  public searchDocumentByFieldVisible = {
-    documentName: false,
-    documentId: false,
-    createdDate: false,
-    title: false,
-  };
+  public searchDocumentNameVisible = false;
+  public searchDocumentIdVisible = false;
+  public searchCreatedDateVisible = false;
+  public searchTitleVisible = false;
 
   public listOfData: DataItem[] = documentList;
 
@@ -159,11 +159,45 @@ export class DocumentListComponent
     );
   }
 
-  public reset(): void {
-    this.search();
+  public reset(fields: 'title' | 'documentName' | 'createdDate' | 'documentId'): void {
+    if(fields == 'title') this.searchTitleVisible = false;
+    if(fields == 'documentName') this.searchDocumentNameVisible = false;
+    if(fields == 'createdDate') this.searchCreatedDateVisible = false;
+    if(fields == 'documentId') this.searchDocumentIdVisible = false;
   }
 
-  public search(): void {}
+  public search(): void {
+    this.searchTitleVisible = false;
+    this.searchDocumentNameVisible = false;
+    this.searchCreatedDateVisible = false;
+    this.searchDocumentIdVisible = false;
+  }
+
+  public formatDate(): string {
+    const dateValue = this.searchDocumentByField.controls['createdDate'].getRawValue();
+  
+    if (!dateValue) return "";
+  
+    // Ensure dateValue is valid before using moment
+    const validDate = moment(dateValue).isValid() ? moment(dateValue) : null;
+
+    if (validDate) {
+      // Set the formatted value to the expected format: YYYY-MM-DDTHH:mm:ss.SSSSSSSSS
+      this.searchDocumentByField.controls['createdDate'].setValue(
+        validDate.format("YYYY-MM-DD")
+      );
+    } else {
+      console.error('Invalid date value');
+    }
+  
+    return this.searchDocumentByField.controls['createdDate'].getRawValue();
+  }
+
+  public disableFutureDates = (current: Date): boolean => {
+    const today = new Date();
+
+    return current > today;
+  }
 
   // form
 
@@ -175,7 +209,7 @@ export class DocumentListComponent
     this.searchDocumentByField = this._formBuilder.nonNullable.group({
       documentName: [''],
       documentId: [''],
-      createdDate: [''],
+      createdDate: [new Date()],
       title: [''],
     });
   }
