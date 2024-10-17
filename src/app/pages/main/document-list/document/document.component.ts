@@ -9,6 +9,7 @@ import { NzQRCodeComponent } from 'ng-zorro-antd/qr-code';
 import { NzResultComponent } from 'ng-zorro-antd/result';
 import { NzUploadComponent } from 'ng-zorro-antd/upload';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { asapScheduler } from 'rxjs';
 
 @Component({
   selector: 'fd-document',
@@ -32,20 +33,32 @@ export class DocumentComponent {
 
   public originalPdfSrc: string | undefined = '';
   public translatedPdfSrc: string | undefined = '';
+  public fileReader = new FileReader();
 
   public readonly message = inject(NzMessageService);
   public readonly cdr = inject(ChangeDetectorRef);
 
   public pdfReader = (type: 'translated' | 'original', pdfSrc: File): void => {
-    const fileReader = new FileReader();
+    if (this.fileReader.readyState === 1) {
+      console.warn('FileReader is busy. Please wait.');
+      return;
+    }
 
-    fileReader.onload = (e): void => {
-      if (type === 'translated')
+    this.fileReader.onload = (e): void => {
+      if (type === 'translated') {
         this.translatedPdfSrc = e.target?.result as string;
-      if (type === 'original') this.originalPdfSrc = e.target?.result as string;
+      }
+      if (type === 'original') {
+        this.originalPdfSrc = e.target?.result as string;
+      }
     };
 
-    fileReader.readAsArrayBuffer(pdfSrc);
+    this.fileReader.onerror = (e): void => {
+      console.error('Error reading file');
+    };
+
+    this.fileReader.readAsArrayBuffer(pdfSrc);
+
     this.cdr.detectChanges();
   };
 
@@ -53,18 +66,22 @@ export class DocumentComponent {
     type: 'translated' | 'original',
     selectedFile: FixMeLater,
   ): void {
-    const isPdf = selectedFile.type === 'application/pdf';
-    const isLt2M = selectedFile.size! / 1024 / 1024 < 2;
+    const isPdf = selectedFile.file.type === 'application/pdf';
+    const isLt2M = selectedFile.file.size! / 1024 / 1024 < 2;
 
     if (!isPdf) {
       this.message.error('You can only upload PDF file!');
-    }
 
-    if (!isLt2M) {
+      return;
+    } else if (!isLt2M) {
       this.message.error('Image must smaller than 2MB!');
+
+      return;
     }
 
-    this.pdfReader(type, selectedFile.file.originFileObj);
+    asapScheduler.schedule(() => {
+      this.pdfReader(type, selectedFile.file.originFileObj);
+    }, 200);
   }
 
   public deleteSelectedPdf(type: 'translated' | 'original'): void {
@@ -89,6 +106,12 @@ export class DocumentComponent {
 
     link.click();
   }
+
+  public save(): void {
+    console.log('save');
+  }
+
+  // Save as PDF
 
   private convertBase64ToBlob(Base64Image: string): Blob {
     // split into two parts

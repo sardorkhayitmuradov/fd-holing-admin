@@ -1,104 +1,136 @@
-<div class="qrCode" id="download">
-  <div class="qrCode__wrapper">
-    <qrcode
-      #qrCode
-      [allowEmptyString]="true"
-      [alt]="'A custom alt attribute'"
-      [ariaLabel]="'QR Code image with the following content...'"
-      [colorDark]="'#000'"
-      [colorLight]="'#ffffffff'"
-      [cssClass]="'center'"
-      [elementType]="'img'"
-      [errorCorrectionLevel]="'M'"
-      [qrdata]="qrCodeLink"
-      [scale]="128"
-      [title]="'A custom title attribute'"
-      [width]="200"
-      class="qrCode__wrapper__code"
-    ></qrcode>
+<div class="qrCode">
+  <div class="qrCode__downloader" id="download">
+    <div class="qrCode__downloader__wrapper">
+      <qrcode
+        #qrCode
+        [allowEmptyString]="true"
+        [alt]="'A custom alt attribute'"
+        [ariaLabel]="'QR Code image with the following content...'"
+        [colorDark]="'#000'"
+        [colorLight]="'#ffffffff'"
+        [cssClass]="'center'"
+        [elementType]="'img'"
+        [errorCorrectionLevel]="'M'"
+        [qrdata]="qrCodeLink"
+        [scale]="128"
+        [title]="'A custom title attribute'"
+        [width]="200"
+        class="qrCode__downloader__wrapper__code"
+      ></qrcode>
+    </div>
+
+    <button
+      (click)="downloadQrCode(qrCode)"
+      class="qrCode__downloader__wrapper__btn"
+      nz-button
+      nzType="primary"
+    >
+      Download
+    </button>
   </div>
 
   <button
-    (click)="downloadQrCode(qrCode)"
-    class="qrCode__wrapper__btn"
+    (click)="save()"
+    class="qrCode__btn"
+    disabled
     nz-button
     nzType="primary"
+    style="margin-top: 20px;"
   >
-    Download
+    Сохранять
   </button>
 </div>
 
 <div class="document__uploads">
   <div class="document__uploads__item">
+    <button
+      (click)="deleteSelectedPdf('translated')"
+      [disabled]="!translatedPdfSrc"
+      [nzDanger]="translatedPdfSrc"
+      class="document__uploads__item__btn"
+      nz-button
+      nzType="primary"
+    >
+      Удалить файл
+    </button>
     @if (!translatedPdfSrc) {
       <nz-upload
         (nzChange)="onUploadChange('translated', $event)"
         [nzShowUploadList]="false"
-        class="avatar-uploader"
+        class="document__uploads__item__uploader"
         nzListType="picture-card"
-        nzName="avatar"
       >
           <span
             class="upload-icon"
+            style="margin-right: 10px"
             nz-icon
             [nzType]="loading ? 'loading' : 'plus'"
           ></span>
-        <div class="ant-upload-text">Upload translated</div>
+        <div class="ant-upload-text">Загружайте только переведенный PDF-файл!</div>
       </nz-upload>
     } @else {
-      <button
-        (click)="deleteSelectedPdf('translated')"
-        class="qrCode__wrapper__btn"
-        nz-button
-        nzType="primary"
-      >
-        Delete
-      </button>
 
       <pdf-viewer
         [src]="translatedPdfSrc"
-        [show-all]="false"
+        [rotation]="0"
+        [original-size]="false"
+        [show-all]="true"
+        [fit-to-page]="false"
+        [zoom]="1"
+        [zoom-scale]="'page-fit'"
+        [stick-to-page]="false"
+        [render-text]="true"
+        [external-link-target]="'blank'"
         [autoresize]="false"
-        [render-text]="false"
-        [original-size]="true"
-        style="width: 100%; height: 500px"
+        [show-borders]="true"
+        style="width: 100%; height: 500px; margin: 0 auto;"
       ></pdf-viewer>
     }
   </div>
 
   <div class="document__uploads__item">
-    <nz-upload
-      (nzChange)="onUploadChange('original',$event)"
-      [nzShowUploadList]="false"
-      class="avatar-uploader"
-      nzListType="picture-card"
-      nzName="avatar"
+    <button
+      (click)="deleteSelectedPdf('original')"
+      [disabled]="!originalPdfSrc"
+      [nzDanger]="originalPdfSrc"
+      class="document__uploads__item__btn"
+      nz-button
+      nzType="primary"
     >
-      @if (!originalPdfSrc) {
+      Удалить файл
+    </button>
+
+    @if (!originalPdfSrc) {
+      <nz-upload
+        (nzChange)="onUploadChange('original',$event)"
+        [nzShowUploadList]="false"
+        class="document__uploads__item__uploader"
+        nzListType="picture-card"
+      >
         <span
           class="upload-icon"
+          style="margin-right: 10px"
           nz-icon
           [nzType]="loading ? 'loading' : 'plus'"
         ></span>
-        <div class="ant-upload-text">Upload Original</div>
-      } @else {
-        <button
-          (click)="deleteSelectedPdf('original')"
-          class="qrCode__wrapper__btn"
-          nz-button
-          nzType="primary"
-        >
-          Delete
-        </button>
-        <pdf-viewer
-          [src]="originalPdfSrc"
-          [show-all]="false"
-          [autoresize]="false"
-          [render-text]="false"
-          [original-size]="true"
-          style="width: 100%; height: 500px"
-        ></pdf-viewer>
-      }
-    </nz-upload>
+        <div class="ant-upload-text">Загружайте только оригинальный PDF-файл!</div>
+      </nz-upload>
+    } @else {
+      <pdf-viewer
+        [src]="originalPdfSrc"
+        [rotation]="0"
+        [original-size]="false"
+        [show-all]="true"
+        [fit-to-page]="false"
+        [zoom]="1"
+        [zoom-scale]="'page-fit'"
+        [stick-to-page]="false"
+        [render-text]="true"
+        [external-link-target]="'blank'"
+        [autoresize]="false"
+        [show-borders]="true"
+        style="width: 100%; height: 500px; margin: 0 auto;"
+      ></pdf-viewer>
+    }
   </div>
 </div>

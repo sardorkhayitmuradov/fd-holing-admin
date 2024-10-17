@@ -13,6 +13,12 @@ body {
   overscroll-behavior: none;
   overflow-x: hidden;
 
+  .hiddenCanvasElement {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+  }
+
   &.highlight-links {
     a {
       background-color: $blue-400;

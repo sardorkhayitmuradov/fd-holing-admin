@@ -2,27 +2,41 @@
 
 :host {
   .qrCode {
-    @include flex-column(center, center, 20px);
-    width: fit-content;
-    margin-bottom: 100px;
+    @include flex(flex-start, space-between, 20px);
 
-    &__wrapper {
+    &__downloader {
+      @include flex-column(center, center, 20px);
       width: fit-content;
-      border: 1px solid #f0f0f0;
-      border-radius: 5px;
+      margin-bottom: 100px;
 
-      &__code {
-        cursor: pointer;
+      &__wrapper {
+        width: fit-content;
+        border: 1px solid #f0f0f0;
+        border-radius: 5px;
+
+        &__code {
+          cursor: pointer;
+        }
       }
     }
   }
 
   .document__uploads {
-    @include flex(center, space-between, 20px);
+    @include flex(flex-start, center, 20px);
+    width: 100%;
 
     &__item {
-      width: 100% !important;
-      height: 500px !important;
+      @include flex-column(start, flex-end, 20px);
+      width: 100%;
+
+      &__btn {
+        align-self: flex-end;
+      }
+
+      &__uploader {
+        max-width: 500px;
+        height: 600px;
+      }
     }
   }
 
@@ -32,6 +46,20 @@
   .ant-upload.ant-upload-select-picture-card {
     width: 100% !important;
     height: 500px !important;
+  }
+
+  .ng2-pdf-viewer-container::-webkit-scrollbar {
+    width: 2px !important;
+    background-color: white !important;
+    border-radius: 20px !important;
+  }
+
+  .ng2-pdf-viewer-container::-webkit-scrollbar:horizontal {
+    height: 3px !important;
+  }
+
+  .ng2-pdf-viewer-container::-webkit-scrollbar-thumb {
+    background: #ececec !important;
   }
 }
 
