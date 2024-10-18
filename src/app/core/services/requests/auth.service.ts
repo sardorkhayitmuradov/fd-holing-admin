@@ -1,29 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { of, switchMap } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 
 import { ENDPOINTS } from '../../constants/endpoints';
 import { ILoginRequestBody } from '../../interfaces/auth/login-request-body.interface';
 import { ILoginResponse } from '../../interfaces/auth/login-response.interface';
-import { AccessTokenStorageService } from '../root/storage.service';
+// import { AccessTokenStorageService } from '../root/storage.service';
 import { RequestService } from './@request.service';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/auth/hell';
   public constructor(
     private readonly _http: RequestService,
     private readonly _router: Router,
-    private readonly _accessTokenStorageService: AccessTokenStorageService,
+    // private readonly _accessTokenStorageService: AccessTokenStorageService,
   ) {}
 
   public login(credentials: ILoginRequestBody): Observable<ILoginResponse> {
     return this._http.post<ILoginResponse>(
-      this.apiUrl,
+      ENDPOINTS['auth'].api,
       ENDPOINTS['auth'].endpoints['login'],
       credentials,
     );
@@ -44,19 +42,18 @@ export class AuthService {
   // }
 
   public logout(): Observable<boolean> {
-    const accessToken: string = this._accessTokenStorageService.getItem() || '';
-
-    if (!accessToken) {
-      this.internalAppLogout();
-
-      return of(true);
-    }
-
+    // const accessToken: string = this._accessTokenStorageService.getItem() || '';
+    // if (!accessToken) {
+    //   this.internalAppLogout();
+    //
+    //   return of(true);
+    // }
+    //
     return of(true);
   }
 
   private internalAppLogout(): void {
-    this._accessTokenStorageService.removeItem();
+    // this._accessTokenStorageService.removeItem();
     void this._router.navigate(['/']);
   }
 }

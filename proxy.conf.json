@@ -1,21 +1,20 @@
 {
-    "/api/auth/*": {
-      "target": "https://c8b7-178-218-201-17.ngrok-free.app/auth",
-      "secure": false,
-      "changeOrigin": true,
-      "logLevel": "debug",
-      "pathRewrite": {
-        "^/api/auth": "/"
-      }
-    },
-    "/api/documents/*": {
-      "target": "https://c8b7-178-218-201-17.ngrok-free.app/documents",
-      "secure": false,
-      "changeOrigin": true,
-      "logLevel": "debug",
-      "pathRewrite": {
-        "^/api/documents/": "/"
-      }
+  "/api/auth/*": {
+    "target": "https://b4a5-84-54-92-194.ngrok-free.app/auth",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/auth": "/"
+    }
+  },
+  "/api/documents/*": {
+    "target": "https://b4a5-84-54-92-194.ngrok-free.app/documents",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/documents/": "/"
     }
   }
-  
+}
