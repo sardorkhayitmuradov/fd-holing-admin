@@ -9,6 +9,7 @@ import {
   TimeoutError,
 } from 'rxjs';
 import { ILoginResponse } from '@app/core/interfaces/auth/login-response.interface';
+import { ILoginRequestBody } from '@app/core/interfaces/auth/login-request-body.interface';
 
 export interface IRequestOptions {
   headers?: {
@@ -57,7 +58,7 @@ export class RequestService {
   public post<T>(
     api: string,
     url: string,
-    body?: ILoginResponse,
+    body?: ILoginRequestBody,
     options?: IRequestOptions,
   ): Observable<T> {
     return this._http

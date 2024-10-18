@@ -1,3 +1,6 @@
 export interface ILoginResponse {
-  access_token: string
+  status: 'SUCCESS' | 'ERROR';
+  data: {
+    token: string;
+  };
 }

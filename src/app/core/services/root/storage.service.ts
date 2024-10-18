@@ -1,11 +1,9 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
-import {
-  ACCESS_TOKEN_KEY,
-} from "../../constants/storage";
+import { ACCESS_TOKEN_KEY } from '../../constants/storage';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class StorageService {
   public constructor(private readonly _storageKey: string) {}
@@ -28,11 +26,10 @@ export class StorageService {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AccessTokenStorageService extends StorageService {
   public constructor() {
     super(ACCESS_TOKEN_KEY);
   }
 }
-
