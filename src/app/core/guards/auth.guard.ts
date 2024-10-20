@@ -12,10 +12,10 @@ export const isAuthorized = guardFactory(
     const authState = inject(AuthService);
     const router = inject(Router)
 
-    return authState.isAuthorized.pipe(
+    return authState.checkAuthenticated().pipe(
       switchMap(authorized => {
         if(!authorized) {
-          return from(router.navigate(["/"])).pipe(map(() => true))
+          return from(router.navigate(["/auth/login"])).pipe(map(() => true))
         } else {
           return  of(true)
         }
@@ -29,10 +29,10 @@ export const isAnonymous = guardFactory(
     const authState = inject(AuthService);
     const router = inject(Router)
 
-    return authState.isAuthorized.pipe(
+    return authState.checkAuthenticated().pipe(
       switchMap(authorized => {
         if(authorized) {
-          return from(router.navigate(["/admin"])).pipe(map(() => true))
+          return from(router.navigate(["/admin/dashboard"])).pipe(map(() => true))
         } else {
           return of(true)
         }

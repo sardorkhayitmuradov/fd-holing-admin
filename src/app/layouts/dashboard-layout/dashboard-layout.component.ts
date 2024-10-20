@@ -51,17 +51,15 @@ export class DashboardLayoutComponent extends UnsubscribeDirective {
   }
 
   public handleLogOut(): void {
-    this.subscribeTo = this.authService.logOut().subscribe(
-      {
-        next: (): void => {
-          this.router.navigate(['/']);
-          this.message.create('success', 'Вы успешно вышли из системы!', {
-            nzDuration: 2000,
-          });
+    this.subscribeTo = this.authService.logOut().subscribe({
+      next: (): void => {
+        this.router.navigate(["/auth"]);
+        this.message.create('success', 'Вы успешно вышли из системы!', {
+          nzDuration: 2000,
+        });
 
-        },
-      }
-    )
+      },
+    })
 
     this.cdr.markForCheck();
   }
