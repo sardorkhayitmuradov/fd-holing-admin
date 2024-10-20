@@ -20,10 +20,6 @@
         ></span>
       </ng-template>
     </form>
-    @for (message of messages; track message) {
-      <nz-alert nzCloseable class="container__wrapper__tag" nzType="info"
-                [nzMessage]="message | stringOrJson"></nz-alert>
-    }
     <button (click)="login()" [disabled]="!loginForm.valid" [nzLoading]="loading" class="container__wrapper__btn"
             nz-button
             nzType="primary">Войти в аккаунт

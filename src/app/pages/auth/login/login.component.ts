@@ -55,7 +55,6 @@ export interface ILoginForm {
 export class LoginComponent extends UnsubscribeDirective implements OnInit {
   public passwordVisible = false;
   public loading = false;
-  public messages: string[] = [];
 
   public readonly fb = inject(FormBuilder);
   public readonly router = inject(Router);
@@ -89,9 +88,7 @@ export class LoginComponent extends UnsubscribeDirective implements OnInit {
           this.createBasicMessage();
         },
         error: (err): void => {
-          this.messages.push(
-            err.error?.message || 'Ошибка при входе в систему',
-          );
+          this.createErrorMessage(err.error.message || 'Ошибка при входе в систему')
           this.loading = false;
         },
       });
@@ -103,5 +100,11 @@ export class LoginComponent extends UnsubscribeDirective implements OnInit {
     this.message.create('success', 'Вы успешно вошли в систему!', {
       nzDuration: 2000,
     });
+  }
+
+  private createErrorMessage(text: string): void {
+    this.message.create("error", text, {
+      nzDuration: 2000,
+    })
   }
 }

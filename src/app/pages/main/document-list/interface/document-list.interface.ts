@@ -8,3 +8,8 @@ export interface DataItem {
 export interface DocumentAddFrom {
   title: string;
 }
+
+export interface IPaginationDocuments {
+  page: number;
+  limit: number;
+}

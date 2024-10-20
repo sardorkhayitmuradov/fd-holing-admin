@@ -13,7 +13,17 @@ export const ENDPOINTS: {[key: string]: IEndpoint} = {
   },
   documents: {
     api: "api/documents",
-    endpoints: {},
+    endpoints: {
+      create: "create",
+      search: "search",
+      view: "view"
+    },
   },
+  uploads: {
+    api: "api/uploads",
+    endpoints: {
+      uploads: "uploads"
+    }
+  }
 } as const;
   

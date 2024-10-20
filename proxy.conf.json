@@ -9,12 +9,21 @@
     }
   },
   "/api/documents/*": {
-    "target": "https://fdholding.gymrat.uz/documents",
+    "target": "https://fdholding.gymrat.uz",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
     "pathRewrite": {
-      "^/api/documents/": "/"
+      "^/api/documents": "/documents"
+    }
+  },
+  "/api/uploads/*": {
+    "target": "https://fdholding.gymrat.uz",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/uploads": "/uploads"
     }
   }
 }
