@@ -1,9 +1,5 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { IDocument } from '@core/interceptors/documents/documents.interface';
-import { DocumentService } from '@core/services/requests/documents/documents.service';
-import { UnsubscribeDirective } from '@shared/directives/unsubscribe.directive';
 
 import { FixMeLater, QRCodeModule } from 'angularx-qrcode';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -13,6 +9,10 @@ import { NzQRCodeComponent } from 'ng-zorro-antd/qr-code';
 import { NzResultComponent } from 'ng-zorro-antd/result';
 import { NzUploadComponent } from 'ng-zorro-antd/upload';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+
+import { IDocument } from '@core/interceptors/documents/documents.interface';
+import { DocumentService } from '@core/services/requests/documents/documents.service';
+import { UnsubscribeDirective } from '@shared/directives/unsubscribe.directive';
 
 @Component({
   selector: 'fd-document',
@@ -41,8 +41,9 @@ export class DocumentComponent extends UnsubscribeDirective implements OnInit {
   public readonly cdr = inject(ChangeDetectorRef);
   private readonly _documentService = inject(DocumentService);
   private readonly _activatedRoute = inject(ActivatedRoute);
-  private readonly http = inject(HttpClient);
-
+  // private readonly http = inject(HttpClient);
+  
+  private _document: IDocument;
   public constructor(){
     super()
   }
@@ -67,29 +68,26 @@ export class DocumentComponent extends UnsubscribeDirective implements OnInit {
 
   // Custom upload request triggered by the "Save" button
   public customUploadRequest = (item: File): void => {
-    // This method will be triggered when calling this.fileReader.readAsArrayBuffer()
-    const formData = new FormData();
-
-    formData.append('file', item as Blob); // Append the file for manual upload
-
-    const headers = new HttpHeaders({
-      Authorization: 'Bearer YOUR_TOKEN', // Replace with your authorization token if needed
-    });
-
     this.loading = true;
 
-    this.http
-      .post('https://your-backend-endpoint/upload', formData, { headers })
-      .subscribe({
-        next: () => {
-          this.loading = false;
-          this.message.success('Файл успешно загружен!');
-        },
-        error: () => {
-          this.loading = false;
-          this.message.error('Ошибка при загрузке файла.');
-        },
-      });
+    const documentNumber = this._document.documentNumber.split(" ").slice(-1)[0]
+
+    if(!item && !this._document._id) {
+      return;
+    }
+
+    this.subscribeTo = this._documentService.updateDocument(this._document._id, item, {
+      documentNumber
+    }).subscribe({
+      next: () => {
+        this.loading = false;
+        this.message.success('Файл успешно загружен!');
+      },
+      error: (err) => {
+        this.loading = false;
+        this.message.error(err.error.message || 'Ошибка при загрузке файла.');
+      },
+    })
   };
 
   // Save function that sends the PDF file to the API
@@ -171,11 +169,13 @@ export class DocumentComponent extends UnsubscribeDirective implements OnInit {
       {
         next: (response: IDocument): void => {
           if(response.document) {
+            
             this.qrCodeLink = this.qrCodeLink + id + "?fileName=" +  response.document.split("/").slice(-1);
 
             this.pdfSrc = "https://fdholding.gymrat.uz/" + response.document;
           }
           
+          this._document = response;
           this.loading = false
         },
         error: (err): void => {

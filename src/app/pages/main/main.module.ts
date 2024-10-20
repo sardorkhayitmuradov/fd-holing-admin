@@ -42,16 +42,6 @@ const routes: Routes = [
           breadcrumb: 'Документ',
         },
       },
-      {
-        path: 'settings',
-        loadComponent: () =>
-          import('./settings/settings.component').then(
-            (m) => m.SettingsComponent,
-          ),
-        data: {
-          breadcrumb: 'Настройки',
-        },
-      },
     ],
   },
 ];

@@ -63,11 +63,15 @@ export class DocumentService {
   }
 
   public updateDocument(
-    document: File,
-    documentId: number,
-    params: IReqeustDocumentUpdate
+    id: string,
+    body: File,
+    params: IReqeustDocumentUpdate,
   ): Observable<unknown> {
-    return this._http.put(ENDPOINTS.documents.api, `${documentId}`, document,
+    const formData = new FormData();
+
+    formData.append('document', body as Blob);
+
+    return this._httpService.put(`${ENDPOINTS.documents.api}/${id}`, formData,
       {
         params: {
           ...params
@@ -76,15 +80,16 @@ export class DocumentService {
     )
   }
 
-  public downloadDocument(
-    params: string
-  ): Observable<unknown> {
-    return this._http.get(ENDPOINTS.uploads.api, "IELTS_CERTIFICATE-244699367.pdf", {}, {
-      headers: {
-        'Accept': 'application/pdf',
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
+  public deleteDocumentById(
+    id: string
+  ): Observable<IDocument> {
+    return this._http.delete(ENDPOINTS.documents.api, id).pipe(
+      switchMap((response: IResponse<IDocument>): Observable<IDocument> => {
+        if (!response.data) return of(null);
+
+        return of(response.data)
+      })
+    )
   }
 
   public searchDocument(
@@ -103,11 +108,17 @@ export class DocumentService {
     )
   }
 
-  public viewCount(id: string): Observable<any> {
+  public viewCount(id: string): Observable<IDocument> {
     return this._httpService.put(`${ENDPOINTS.documents.api}/${ENDPOINTS.documents.endpoints.view}/${id}`, null, {
       headers: {
         "Content-Type":'application/json',
       }
-    })
+    }).pipe(
+      switchMap(
+        (response: IResponse<IDocument>): Observable<IDocument> => {
+          return of(response.data)
+        }
+      )
+    )
   }
 }

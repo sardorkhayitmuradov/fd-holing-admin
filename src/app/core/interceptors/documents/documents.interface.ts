@@ -27,11 +27,12 @@ export interface IReqeustDocumentCreate {
 }
 
 export interface IReqeustDocumentListSearch {
-  documentNumber: number;
-  title: string;
-  createdDate: string;
+  documentNumber?: number;
+  title?: string;
+  createdDate?: string;
+  docName?: string;
 }
 
 export interface IReqeustDocumentUpdate {
-  documentNumber: number
+  documentNumber: string
 }

@@ -26,16 +26,14 @@ import {
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTooltipDirective, NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { asapScheduler, map, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
-import { IDocument, IDocumentsList, IReqeustDocumentCreate } from '@core/interceptors/documents/documents.interface';
+import { IDocument, IDocumentsList, IReqeustDocumentCreate, IReqeustDocumentListSearch } from '@core/interceptors/documents/documents.interface';
 import { DocumentService } from '@core/services/requests/documents/documents.service';
-import { AccessTokenStorageService } from '@core/services/root/storage.service';
 import { UnsubscribeDirective } from '@shared/directives/unsubscribe.directive';
 import { TextMaskPipe } from '@shared/pipes/text-mask.pipe';
 
-import { documentList } from './constants/document-list';
-import { DataItem, IPaginationDocuments } from './interface/document-list.interface';
+import { IPaginationDocuments } from './interface/document-list.interface';
 
 @Component({
   selector: 'fd-document-list',
@@ -80,7 +78,6 @@ export class DocumentListComponent
   public searchCreatedDateVisible = false;
   public searchTitleVisible = false;
 
-  public listOfData: DataItem[] = documentList;
   public documentList$: Observable<IDocument[]>;
 
   public paginationDocuments: IPaginationDocuments = {
@@ -114,18 +111,33 @@ export class DocumentListComponent
 
   public deleteDocument(id: string): void {
     this.isLoadingTable = true;
-    this.listOfData = this.listOfData.filter((document) => document.id !== id);
 
-    asapScheduler.schedule((): void => {
+    if(!id) {
       this.isLoadingTable = false;
 
-      this.message.success(
-        'Вы успешно удалили документ, показанный в таблице!',
-        {
+      return;
+    }
+
+    this.subscribeTo = this._documentService.deleteDocumentById(id).subscribe({
+      next: (): void => {
+        this.isLoadingTable = false;
+        this.isVisibleAddDocumentModal = false;
+
+        this.message.create("success", "Вы успешно удалили документ, показанный в таблице!", {
           nzDuration: 1000,
-        },
-      );
-    }, 500);
+        })
+
+        this.getDocumentsList(this.paginationDocuments);
+
+        this._cdr.detectChanges();
+      },
+      error: (err): void => {
+        this.isLoadingTable = false;
+        this.message.create("error", err.error.message || 'Произошла ошибка в системе!', {
+          nzDuration: 1000,
+        })
+      },
+    })
   }
 
   public handleCancelDocumentModal(): void {
@@ -134,18 +146,19 @@ export class DocumentListComponent
 
   // routing download
 
-  public reset(fields: 'title' | 'documentName' | 'createdDate' | 'documentId'): void {
+  public reset(): void {
+    this.getDocumentsList(this.paginationDocuments);
+  }
+
+  public resetByField(fields: 'title' | 'docName' | 'createdDate' | 'documentNumber'): void {
     if(fields == 'title') this.searchTitleVisible = false;
-    if(fields == 'documentName') this.searchDocumentNameVisible = false;
+    if(fields == 'docName') this.searchDocumentNameVisible = false;
     if(fields == 'createdDate') this.searchCreatedDateVisible = false;
-    if(fields == 'documentId') this.searchDocumentIdVisible = false;
+    if(fields == 'documentNumber') this.searchDocumentIdVisible = false;
   }
 
   public search(): void {
-    this.searchTitleVisible = false;
-    this.searchDocumentNameVisible = false;
-    this.searchCreatedDateVisible = false;
-    this.searchDocumentIdVisible = false;
+    this.searchDocuments();
   }
 
   public formatDate(): string {
@@ -282,9 +295,9 @@ export class DocumentListComponent
     });
 
     this.searchDocumentByField = this._formBuilder.nonNullable.group({
-      documentName: [''],
-      documentId: [''],
-      createdDate: [new Date()],
+      docName: [''],
+      documentNumber: [''],
+      createdDate: [""],
       title: [''],
     });
   }
@@ -292,13 +305,14 @@ export class DocumentListComponent
   // Doucment list
 
   private getDocumentsList(pagination: IPaginationDocuments): void {
+    this.isLoadingTable = true;
     this.documentList$ = this._documentService.getDocumentsList(
       pagination
     ).pipe(
       map((response: IDocumentsList): IDocument[] => {
+        this.isLoadingTable = false;
         this.paginationDocuments.page = Number(response.page);
         this.paginationDocuments.limit = Number(response.limit);
-        this.isLoadingTable = false;
 
         return response.documents
       })
@@ -318,6 +332,33 @@ export class DocumentListComponent
     }).then(function(blob) {
       download(blob);
     });
+  }
+
+  // Search
+  private searchDocuments(): void {
+    const formValue = this.searchDocumentByField.getRawValue() as IReqeustDocumentListSearch;
+
+    this.isLoadingTable = true;
+
+    const searchFields: IReqeustDocumentListSearch = {};
+
+    for(const key in formValue){
+      if(formValue[key]) {
+        searchFields[key] = formValue[key].trim() as string;
+      }
+    }
+
+    this.documentList$ = this._documentService.searchDocument(searchFields).pipe(
+      map((response: IDocumentsList): IDocument[] => {
+        this.searchTitleVisible = false;
+        this.searchDocumentNameVisible = false;
+        this.searchCreatedDateVisible = false;
+        this.searchDocumentIdVisible = false;
+        this.isLoadingTable = false;
+        
+        return response.documents;
+      })
+    )
   }
 
 }
