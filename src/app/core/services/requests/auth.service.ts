@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { BehaviorSubject, map, of } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
@@ -16,13 +15,12 @@ import { RequestService } from './@request.service';
   providedIn: 'root',
 })
 export class AuthService {
-  public readonly loginData$: BehaviorSubject<ILoginResponse | null> = new BehaviorSubject(null);
+  public readonly loginData$: BehaviorSubject<ILoginResponse | null> = new BehaviorSubject({ access_token: this._accessTokenStorageService.getItem() });
 
   public readonly isAuthorized: Observable<boolean> = this.loginData$.pipe(map(data => !!data))
 
   public constructor(
     private readonly _http: RequestService,
-    private readonly _router: Router,
     private readonly _accessTokenStorageService: AccessTokenStorageService,
   ) {}
 
