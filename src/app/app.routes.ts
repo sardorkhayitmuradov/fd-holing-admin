@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 
+import { isAnonymous, isAuthorized } from '@core/guards/auth.guard';
+
 export const routes: Routes = [
   {
     path: "",
@@ -8,6 +10,7 @@ export const routes: Routes = [
   },
   {
     path: 'auth',
+    canMatch: [isAnonymous],
     loadChildren: () =>
       import('./pages/auth/auth-routing.module').then(
         (m) => m.AuthRoutingModule,
@@ -15,6 +18,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+    canMatch: [isAuthorized],
     loadChildren: () =>
       import('./pages/main/main.module').then((m) => m.MainModule),
     data: {

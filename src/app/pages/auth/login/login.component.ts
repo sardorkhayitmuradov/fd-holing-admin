@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormsModule,
@@ -20,11 +20,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalComponent } from 'ng-zorro-antd/modal';
 import { NzResultComponent } from 'ng-zorro-antd/result';
 import { NzTagComponent } from 'ng-zorro-antd/tag';
-import { Subscription } from 'rxjs';
 
+import { AuthService } from '@core/services/requests/auth.service';
+import { UnsubscribeDirective } from '@shared/directives/unsubscribe.directive';
 import { StringOrJsonPipe } from '@shared/pipes/string-or-json.pipe';
 import { FormGroupFrom } from '@shared/types/form-group.types';
-import { AuthService } from '@app/core/services/requests/auth.service';
 
 export interface ILoginForm {
   username: string;
@@ -52,7 +52,7 @@ export interface ILoginForm {
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent extends UnsubscribeDirective implements OnInit {
   public passwordVisible = false;
   public loading = false;
   public messages: string[] = [];
@@ -61,31 +61,32 @@ export class LoginComponent implements OnInit, OnDestroy {
   public readonly router = inject(Router);
   public readonly message = inject(NzMessageService);
   public readonly authService = inject(AuthService);
+  public readonly cdr = inject(ChangeDetectorRef);
 
-  // public readonly authService = inject(AuthorizationService);
   public loginForm = this.fb.group<FormGroupFrom<ILoginForm>>({
-    username: ['Иван Иванович', [Validators.required]],
-    password: ['Pass1234_5', [Validators.required]],
+    username: ['Ibrokhimbek', [Validators.required]],
+    password: ['HelloWorld', [Validators.required]],
   });
 
-  private loginSub: Subscription | undefined;
+  public constructor(){
+    super()
+  }
 
   public ngOnInit(): void {
-    console.log('LoginComponent initialized');
+    return;
   }
 
   public login(): void {
     if (this.loginForm.invalid) return;
 
     this.loading = true;
-    this.loginSub = this.authService
-      .login(this.loginForm.getRawValue() as ILoginForm)
+    this.subscribeTo = this.authService
+      .logIn(this.loginForm.getRawValue() as ILoginForm)
       .subscribe({
-        next: (response): void => {
-          console.log(response);
+        next: (): void => {
           this.loading = false;
+          this.router.navigate(['/admin']);
           this.createBasicMessage();
-          this.router.navigate(['/admin/documents']);
         },
         error: (err): void => {
           this.messages.push(
@@ -94,10 +95,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
       });
-  }
 
-  public ngOnDestroy(): void {
-    this.loginSub?.unsubscribe();
+    this.cdr.markForCheck();
   }
 
   private createBasicMessage(): void {

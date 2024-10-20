@@ -8,8 +8,6 @@ import {
   timeout,
   TimeoutError,
 } from 'rxjs';
-import { ILoginResponse } from '@app/core/interfaces/auth/login-response.interface';
-import { ILoginRequestBody } from '@app/core/interfaces/auth/login-request-body.interface';
 
 export interface IRequestOptions {
   headers?: {
@@ -17,14 +15,14 @@ export interface IRequestOptions {
   };
   observe?: 'body';
   params?:
-    | HttpParams
-    | {
-        [param: string]:
-          | string
-          | number
-          | boolean
-          | ReadonlyArray<string | number | boolean>;
-      };
+  | HttpParams
+  | {
+    [param: string]:
+    | string
+    | number
+    | boolean
+    | ReadonlyArray<string | number | boolean>;
+  };
   reportProgress?: boolean;
   responseType?: 'json';
   withCredentials?: boolean;
@@ -40,14 +38,14 @@ export class RequestService {
     api: string,
     url: string,
     params?:
-      | HttpParams
-      | {
-          [param: string]:
-            | string
-            | number
-            | boolean
-            | ReadonlyArray<string | number | boolean>;
-        },
+    | HttpParams
+    | {
+      [param: string]:
+      | string
+      | number
+      | boolean
+      | ReadonlyArray<string | number | boolean>;
+    },
     options?: IRequestOptions,
   ): Observable<T> {
     return this._http
@@ -58,7 +56,7 @@ export class RequestService {
   public post<T>(
     api: string,
     url: string,
-    body?: ILoginRequestBody,
+    body?: unknown,
     options?: IRequestOptions,
   ): Observable<T> {
     return this._http

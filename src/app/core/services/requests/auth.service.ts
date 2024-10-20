@@ -1,59 +1,52 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { BehaviorSubject, map, of } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
+
+import { IResponse } from '@core/interfaces/reponse.interface';
 
 import { ENDPOINTS } from '../../constants/endpoints';
 import { ILoginRequestBody } from '../../interfaces/auth/login-request-body.interface';
 import { ILoginResponse } from '../../interfaces/auth/login-response.interface';
-// import { AccessTokenStorageService } from '../root/storage.service';
+import { AccessTokenStorageService } from '../root/storage.service';
 import { RequestService } from './@request.service';
-import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  public readonly loginData$: BehaviorSubject<ILoginResponse | null> = new BehaviorSubject(null);
+
+  public readonly isAuthorized: Observable<boolean> = this.loginData$.pipe(map(data => !!data))
+
   public constructor(
     private readonly _http: RequestService,
     private readonly _router: Router,
-    // private readonly _accessTokenStorageService: AccessTokenStorageService,
+    private readonly _accessTokenStorageService: AccessTokenStorageService,
   ) {}
 
-  public login(credentials: ILoginRequestBody): Observable<ILoginResponse> {
-    return this._http.post<ILoginResponse>(
-      ENDPOINTS['auth'].api,
-      ENDPOINTS['auth'].endpoints['login'],
-      credentials,
-    );
+  public logIn(loginBody: ILoginRequestBody): Observable<ILoginResponse> {
+    return this._http
+      .post(ENDPOINTS.auth.api, ENDPOINTS.auth.endpoints.login, loginBody)
+      .pipe(
+        map((response: IResponse<ILoginResponse>): ILoginResponse => {
+          this.loginData$.next(response.data)
+
+          if (response.data.access_token){
+            this._accessTokenStorageService.setItem(response.data.access_token);
+          }
+
+          return response.data;
+        }),
+      );
+
   }
 
-  // public logIn(loginBody: ILoginRequestBody): Observable<ILoginResponse> {
-  //   return this._http
-  //     .post(ENDPOINTS.auth.api, ENDPOINTS.auth.endpoints.login, loginBody)
-  //     .pipe(
-  //       switchMap((response: IResponse<ILoginResponse>) => {
-  //         if (response.data?.access_token) {
-  //           this._accessTokenStorageService.setItem(response.data.access_token);
-  //         }
-
-  //         return of(response.data);
-  //       }),
-  //     );
-  // }
-
-  public logout(): Observable<boolean> {
-    // const accessToken: string = this._accessTokenStorageService.getItem() || '';
-    // if (!accessToken) {
-    //   this.internalAppLogout();
-    //
-    //   return of(true);
-    // }
-    //
+  public logOut(): Observable<boolean> {
+    this.loginData$.next(null); 
+    this._accessTokenStorageService.removeItem();
+    
     return of(true);
-  }
-
-  private internalAppLogout(): void {
-    // this._accessTokenStorageService.removeItem();
-    void this._router.navigate(['/']);
   }
 }

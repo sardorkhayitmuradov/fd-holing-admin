@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import {
   Router,
   RouterLink,
@@ -14,8 +14,11 @@ import {
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSliderModule } from 'ng-zorro-antd/slider';
-import { asapScheduler } from 'rxjs';
+
+import { AuthService } from '@core/services/requests/auth.service';
+import { UnsubscribeDirective } from '@shared/directives/unsubscribe.directive';
 
 @Component({
   selector: 'fd-dashboard-layout',
@@ -35,14 +38,31 @@ import { asapScheduler } from 'rxjs';
   templateUrl: './dashboard-layout.component.html',
   styleUrl: './dashboard-layout.component.scss',
 })
-export class DashboardLayoutComponent {
+export class DashboardLayoutComponent extends UnsubscribeDirective {
   public isCollapsed = false;
 
   public readonly router = inject(Router);
+  public readonly authService = inject(AuthService);
+  public readonly message = inject(NzMessageService);
+  private readonly cdr = inject(ChangeDetectorRef)
+
+  public constructor(){
+    super()
+  }
 
   public handleLogOut(): void {
-    asapScheduler.schedule(() => {
-      this.router.navigate(['/auth/login']);
-    }, 1000);
+    this.subscribeTo = this.authService.logOut().subscribe(
+      {
+        next: (): void => {
+          this.router.navigate(['/']);
+          this.message.create('success', 'Вы успешно вышли из системы!', {
+            nzDuration: 2000,
+          });
+
+        },
+      }
+    )
+
+    this.cdr.markForCheck();
   }
 }

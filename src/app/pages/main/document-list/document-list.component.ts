@@ -26,8 +26,8 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTooltipDirective, NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { asapScheduler } from 'rxjs';
 
-import { UnsubscribeDirective } from '@app/shared/directives/unsubscribe.directive';
-import { TextMaskPipe } from '@app/shared/pipes/text-mask.pipe';
+import { UnsubscribeDirective } from '@shared/directives/unsubscribe.directive';
+import { TextMaskPipe } from '@shared/pipes/text-mask.pipe';
 
 import { documentList } from './constants/document-list';
 import { DataItem, DocumentAddFrom } from './interface/document-list.interface';
@@ -187,6 +187,7 @@ export class DocumentListComponent
         validDate.format("YYYY-MM-DD")
       );
     } else {
+      // eslint-disable-next-line no-console
       console.error('Invalid date value');
     }
   

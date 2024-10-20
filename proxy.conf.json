@@ -1,6 +1,6 @@
 {
   "/api/auth/*": {
-    "target": "https://b4a5-84-54-92-194.ngrok-free.app/auth",
+    "target": "https://fdholding.gymrat.uz/auth",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
@@ -9,7 +9,7 @@
     }
   },
   "/api/documents/*": {
-    "target": "https://b4a5-84-54-92-194.ngrok-free.app/documents",
+    "target": "https://fdholding.gymrat.uz/documents",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",

@@ -1,38 +1,36 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@env/*": ["environments/*"],
+      "@core/*": ["app/core/*"],
+      "@shared/*": ["app/shared/*"],
+      "@modules/*": ["app/modules/*"],
+      "@layout/*": ["app/layout/*"],
+      "@assets/*": ["assets/*"],
+      "@fuse/*": ["@fuse/*"],
+      "@auth/*": ["app/modules/auth/*"],
+      "@mock-api/*": ["app/mock-api/*"],
+      "@admin/*": ["app/modules/admin/*"],
+      "@references/*": ["app/modules/admin/components/references/*"],
+      "@products/*": ["app/modules/admin/components/products/*"],
+      "@journals/*": ["app/modules/admin/components/journals/*"]
+    },
     "outDir": "./dist/out-tsc",
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
+    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "lib": [
-      "ES2022",
-      "dom"
-    ],
-    "baseUrl": "./src",
-    "paths": {
-      "@app/*": ["app/*"],
-      "@shared/*": ["app/shared/*"],
-      "@core": ["app/core/*"]
-    },
+    "useDefineForClassFields": false,
+    "lib": ["ES2022", "dom"]
   },
   "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "enableI18nLegacyMessageIdFormat": false
   }
 }
