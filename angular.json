@@ -22,7 +22,7 @@
               "moment",
               "qrcode"
             ],
-            "outputPath": "dist/fd-holding-admin",
+            "outputPath": "dist",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -77,7 +77,8 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "namedChunks": true
             }
           },
           "defaultConfiguration": "production"

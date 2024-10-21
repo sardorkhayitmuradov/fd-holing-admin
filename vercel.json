@@ -1,0 +1,17 @@
+{
+    "rewrites": [
+      {
+        "source": "/api/auth/:match*",
+        "destination": "https://fdholding.gymrat.uz/auth/:match*"
+      },
+      {
+        "source": "/api/documents/:match*",
+        "destination": "https://fdholding.gymrat.uz/documents/:match*"
+      },
+      {
+        "source": "/api/uploads/:match*",
+        "destination": "https://fdholding.gymrat.uz/uploads/:match*"
+      }
+    ]
+  }
+  
