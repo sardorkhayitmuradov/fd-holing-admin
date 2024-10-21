@@ -17,6 +17,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "allowedCommonJsDependencies": [
+              "downloadjs",
+              "moment",
+              "qrcode"
+            ],
             "outputPath": "dist/fd-holding-admin",
             "index": "src/index.html",
             "browser": "src/main.ts",
