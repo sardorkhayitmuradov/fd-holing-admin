@@ -1,8 +1,4 @@
-<nz-result nzStatus="warning" nzTitle="Эта страница находится в разработке!"
-           style="height: 500px !important; display: flex; flex-direction: column; justify-content: center">
-  <div nz-result-extra style="margin: 0 auto 0">
-    <button nz-button nzType="primary" routerLink="/soft-collection/user-profile" style="margin: 40px auto 0">Перейти на
-      главную
-    </button>
-  </div>
-</nz-result>
+<nz-alert style="text-align: center;" nzMessage="Календарь: {{ selectValue | date: 'dd-MM-yyyy' }}"></nz-alert>
+<div class="calendar">
+  <nz-calendar (nzSelectChange)="selectChange($event)"></nz-calendar>
+</div>

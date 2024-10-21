@@ -88,8 +88,8 @@ export class LoginComponent extends UnsubscribeDirective implements OnInit {
           this.createBasicMessage();
         },
         error: (err): void => {
-          this.createErrorMessage(err.error.message || 'Ошибка при входе в систему')
           this.loading = false;
+          this.createErrorMessage(err.error.message || 'Ошибка при входе в систему')
         },
       });
 
