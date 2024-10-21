@@ -22,7 +22,7 @@
               "moment",
               "qrcode"
             ],
-            "outputPath": "dist",
+            "outputPath": "dist/fd-holding-admin",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
