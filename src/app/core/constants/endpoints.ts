@@ -1,29 +1,29 @@
 export interface IEndpoint {
   api: string;
-  endpoints: {[key: string]: string};
-  queries?: {[key: string]: string};
+  endpoints: { [key: string]: string };
+  queries?: { [key: string]: string };
 }
-  
-export const ENDPOINTS: {[key: string]: IEndpoint} = {
+
+export const ENDPOINTS: { [key: string]: IEndpoint } = {
   auth: {
-    api: "api/auth",
+    api: 'api/auth',
     endpoints: {
-      login: "login"
+      login: 'login',
     },
   },
   documents: {
-    api: "api/documents",
+    api: 'api/documents',
     endpoints: {
-      create: "create",
-      search: "search",
-      view: "view"
+      create: 'create',
+      search: 'search',
+      view: 'view',
+      pagination: 'pagination',
     },
   },
   uploads: {
-    api: "api/uploads",
+    api: 'api/uploads',
     endpoints: {
-      uploads: "uploads"
-    }
-  }
+      uploads: 'uploads',
+    },
+  },
 } as const;
-  
