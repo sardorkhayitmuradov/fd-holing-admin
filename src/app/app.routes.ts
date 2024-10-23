@@ -7,13 +7,13 @@ import { ClientComponent } from './pages/client/client.component';
 
 export const routes: Routes = [
   {
-    path: "",
-    pathMatch: "full",
-    redirectTo: "documents"
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'docs',
   },
   {
-    path: 'documents/:id',
-    component: ClientComponent
+    path: 'docs/:id',
+    component: ClientComponent,
   },
   {
     path: 'auth',
@@ -38,6 +38,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: "error/404", // Redirect to the 404 error page for unknown routes
+    redirectTo: 'error/404', // Redirect to the 404 error page for unknown routes
   },
 ];

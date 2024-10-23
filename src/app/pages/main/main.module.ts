@@ -23,7 +23,7 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'documents',
+        path: 'docs',
         loadComponent: () =>
           import('./document-list/document-list.component').then(
             (m) => m.DocumentListComponent,
@@ -33,7 +33,7 @@ const routes: Routes = [
         },
       },
       {
-        path: 'documents/:id',
+        path: 'docs/:id',
         loadComponent: () =>
           import('./document-list/document/document.component').then(
             (m) => m.DocumentComponent,
