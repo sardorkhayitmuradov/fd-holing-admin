@@ -5,7 +5,7 @@
       "destination": "https://fdholding.gymrat.uz/auth/:match*"
     },
     {
-      "source": "/api/documents/:match*",
+      "source": "/api/docs/:match*",
       "destination": "https://fdholding.gymrat.uz/documents/:match*"
     },
     {
