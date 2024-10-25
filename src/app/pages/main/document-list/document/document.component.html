@@ -1,64 +1,25 @@
 <div class="qrCode">
-  <div class="qrCode__downloader" id="download">
-    <div class="qrCode__downloader__wrapper">
-      <qrcode
-        #qrCode
-        [allowEmptyString]="true"
-        [alt]="'A custom alt attribute'"
-        [ariaLabel]="'QR Code image with the following content...'"
-        [colorDark]="'#000'"
-        [colorLight]="'#ffffffff'"
-        [cssClass]="'center'"
-        [elementType]="'img'"
-        [errorCorrectionLevel]="'M'"
-        [qrdata]="qrCodeLink"
-        [scale]="128"
-        [title]="'A custom title attribute'"
-        [width]="200"
-        class="qrCode__downloader__wrapper__code"
-      ></qrcode>
-    </div>
-
-    <button
-      (click)="downloadQrCode(qrCode)"
-      class="qrCode__downloader__wrapper__btn"
-      nz-button
-      nzType="primary"
-    >
-      Скачать
-    </button>
-  </div>
-
   <div class="document__uploads">
     <div class="document__uploads__item">
-     <div style="width: 100%; display: flex; justify-content: flex-end; gap: 20px;">
+      <div
+        style="width: 100%; display: flex; justify-content: flex-end; gap: 20px"
+      >
         <button
-        (click)="deleteSelectedPdf()"
-        [disabled]="!pdfSrc"
-        [nzDanger]="pdfSrc"
-        class="document__uploads__item__btn"
-        nz-button
-        nzType="primary"
-      >
-        Удалить файл
-      </button>
+          (click)="deleteSelectedPdf('original')"
+          [disabled]="!original"
+          [nzDanger]="original"
+          class="document__uploads__item__btn"
+          nz-button
+          nzType="primary"
+        >
+          Удалить файл
+        </button>
+      </div>
 
-      <button
-        (click)="save()"
-        [disabled]="!pdfSrc"
-        class="document__uploads__item__btn"
-        nz-button
-        nzType="primary"
-        style="margin-top: 20px;"
-      >
-        Сохранить
-      </button>
-     </div>
-  
-      @if (!pdfSrc) {
+      @if (!original) {
         <nz-upload
           [nzShowUploadList]="false"
-          [nzBeforeUpload]="beforeUpload"
+          [nzBeforeUpload]="beforeUploadOriginal"
           [nzAccept]="'application/pdf'"
           class="document__uploads__item__uploader"
           nzListType="picture-card"
@@ -73,7 +34,7 @@
         </nz-upload>
       } @else {
         <pdf-viewer
-          [src]="pdfSrc"
+          [src]="original"
           [rotation]="0"
           [original-size]="false"
           [show-all]="true"
@@ -85,10 +46,80 @@
           [external-link-target]="'blank'"
           [autoresize]="false"
           [show-borders]="true"
-          style="width: 100%; height: 500px; margin: 0 auto; border: 1px solid #f0f0f0;"
+          style="
+            width: 100%;
+            height: 500px;
+            margin: 0 auto;
+            border: 1px solid #f0f0f0;
+          "
+        ></pdf-viewer>
+      }
+    </div>
+    <div class="document__uploads__item">
+      <div
+        style="width: 100%; display: flex; justify-content: flex-end; gap: 20px"
+      >
+        <button
+          (click)="deleteSelectedPdf('translated')"
+          [disabled]="!translated"
+          [nzDanger]="translated"
+          class="document__uploads__item__btn"
+          nz-button
+          nzType="primary"
+        >
+          Удалить файл
+        </button>
+
+        <button
+          (click)="save()"
+          [disabled]="!translated"
+          class="document__uploads__item__btn"
+          nz-button
+          nzType="primary"
+          style="margin-top: 20px"
+        >
+          Сохранить
+        </button>
+      </div>
+
+      @if (!translated) {
+        <nz-upload
+          [nzShowUploadList]="false"
+          [nzBeforeUpload]="beforeUploadTranslated"
+          [nzAccept]="'application/pdf'"
+          class="document__uploads__item__uploader"
+          nzListType="picture-card"
+        >
+          <span
+            class="upload-icon"
+            style="margin-right: 10px"
+            nz-icon
+            [nzType]="loading ? 'loading' : 'plus'"
+          ></span>
+          <div class="ant-upload-text">Загрузить только PDF-файл!</div>
+        </nz-upload>
+      } @else {
+        <pdf-viewer
+          [src]="translated"
+          [rotation]="0"
+          [original-size]="false"
+          [show-all]="true"
+          [fit-to-page]="false"
+          [zoom]="1"
+          [zoom-scale]="'page-fit'"
+          [stick-to-page]="false"
+          [render-text]="true"
+          [external-link-target]="'blank'"
+          [autoresize]="false"
+          [show-borders]="true"
+          style="
+            width: 100%;
+            height: 500px;
+            margin: 0 auto;
+            border: 1px solid #f0f0f0;
+          "
         ></pdf-viewer>
       }
     </div>
   </div>
 </div>
-

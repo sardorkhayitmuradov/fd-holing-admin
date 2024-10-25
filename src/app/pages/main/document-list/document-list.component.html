@@ -1,50 +1,79 @@
 <div class="document">
-  <div style="display: flex; align-items: center; gap: 20px; justify-content: flex-end; width: 100%;">
-    <button style="width: fit-content;" (click)="reset()" nz-button nzType="primary" nzDanger="true">
+  <div
+    style="
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      justify-content: flex-end;
+      width: 100%;
+    "
+  >
+    <button
+      style="width: fit-content"
+      (click)="reset()"
+      nz-button
+      nzType="primary"
+      nzDanger="true"
+    >
       Сбросить фильтры
     </button>
-    <button style="width: fit-content;" (click)="showAddDocumentModal()" nz-button nzType="primary">
+    <button
+      style="width: fit-content"
+      (click)="showAddDocumentModal()"
+      nz-button
+      nzType="primary"
+    >
       Добавить
     </button>
   </div>
-  <nz-table #sortTable [nzBordered]="true" [nzData]="documentList$ | async" [nzLoading]="isLoadingTable"
-    [nzPageIndex]="paginationDocuments.page" [nzPageSize]="paginationDocuments.limit"
-    [nzPageSizeOptions]="[20, 50, 100]" (nzPageIndexChange)="handlePageChange($event)"
-    (nzPageSizeChange)="handleLimitChange($event)" class="document__table" nzShowSizeChanger nzTableLayout="fixed">
+  <nz-table
+    #sortTable
+    [nzBordered]="true"
+    [nzData]="documentList$ | async"
+    [nzLoading]="isLoadingTable"
+    [nzPageIndex]="paginationDocuments.page"
+    [nzPageSize]="paginationDocuments.limit"
+    [nzPageSizeOptions]="[20, 50, 100]"
+    (nzPageIndexChange)="handlePageChange($event)"
+    (nzPageSizeChange)="handleLimitChange($event)"
+    class="document__table"
+    nzShowSizeChanger
+    nzTableLayout="fixed"
+  >
     <thead>
       <tr>
         <th nzCustomFilter nzWidth="200px">
           ID документа
-          <nz-filter-trigger [(nzVisible)]="searchDocumentIdVisible" [nzActive]="
+          <nz-filter-trigger
+            [(nzVisible)]="searchDocumentIdVisible"
+            [nzActive]="
               searchDocumentByField.get('documentNumber').value.length > 0
-            " [nzDropdownMenu]="documentNumber">
+            "
+            [nzDropdownMenu]="documentNumber"
+          >
             <span nz-icon nzType="search"></span>
           </nz-filter-trigger>
         </th>
         <th nzCustomFilter>
           Заголовок
-          <nz-filter-trigger [(nzVisible)]="searchTitleVisible" [nzActive]="
-              searchDocumentByField.get('title').value.length > 0
-            " [nzDropdownMenu]="title">
+          <nz-filter-trigger
+            [(nzVisible)]="searchTitleVisible"
+            [nzActive]="searchDocumentByField.get('title').value.length > 0"
+            [nzDropdownMenu]="title"
+          >
             <span nz-icon nzType="search"></span>
           </nz-filter-trigger>
         </th>
-        <th nzCustomFilter>
-          Документ
-          <nz-filter-trigger [(nzVisible)]="searchDocumentNameVisible" [nzActive]="
-              searchDocumentByField.get('docName').value.length > 0
-            " [nzDropdownMenu]="docName">
-            <span nz-icon nzType="search"></span>
-          </nz-filter-trigger>
-        </th>
-        <th nzCustomFilter nzWidth="130px">
-          Просмотры
-        </th>
+        <th nzCustomFilter>Документ (original)</th>
+        <th nzCustomFilter>Документ (translated)</th>
+        <th nzCustomFilter nzWidth="130px">Просмотры</th>
         <th nzCustomFilter nzWidth="200px">
           Дата создания
-          <nz-filter-trigger [(nzVisible)]="searchCreatedDateVisible" [nzActive]="
-              formatDate.length > 0 || false
-            " [nzDropdownMenu]="createdDate">
+          <nz-filter-trigger
+            [(nzVisible)]="searchCreatedDateVisible"
+            [nzActive]="formatDate.length > 0 || false"
+            [nzDropdownMenu]="createdDate"
+          >
             <span nz-icon nzType="search"></span>
           </nz-filter-trigger>
         </th>
@@ -55,23 +84,44 @@
       @for (data of sortTable.data; track data._id) {
         <tr>
           <td>{{ data.documentNumber }}</td>
-          <td>{{ (data.title || "-") | textMask: 30 }}</td>
-          <td>{{ (data.document?.split("/")?.slice(-1) || "-") | textMask: 30 }}</td>
+          <td>{{ data.title || "-" | textMask: 30 }}</td>
+          <td>
+            {{
+              data.original?.split("/")?.slice(-1).join() || "-" | textMask: 30
+            }}
+          </td>
+          <td>
+            {{
+              data.translated?.split("/")?.slice(-1).join() || "-"
+                | textMask: 30
+            }}
+          </td>
           <td>{{ data.viewCount }}</td>
           <td>{{ data.createdAt | date: "dd.MM.YYYY" }}</td>
           <td class="document__table__tbody__td">
             <div class="document__table__tbody__td__action">
-              <nz-tag style="cursor: pointer" [routerLink]="['/admin/documents', data._id]">Смотреть
+              <nz-tag
+                style="cursor: pointer"
+                [routerLink]="['/admin/documents', data._id]"
+                >Смотреть
               </nz-tag>
               <!-- <a href="https://fdholding.gymrat.uz/uploads/IELTS_CERTIFICATE-244699367.pdf" download>download</a> -->
-                <nz-tag style="cursor: pointer" [nzColor]="'cyan'" (click)="handleDownloadDocument(data)">
-                    @if (data.document) {
-                      Скачать
-                    } @else {
-                      Нет файла
-                    }
-                </nz-tag>
-              <nz-tag style="cursor: pointer" [nzColor]="'volcano'" (click)="deleteDocument(data._id)">Удалить
+              <nz-tag
+                style="cursor: pointer"
+                [nzColor]="'cyan'"
+                (click)="handleDownloadDocument(data)"
+              >
+                @if (data.translated && data.original) {
+                  Скачать
+                } @else {
+                  Нет файла
+                }
+              </nz-tag>
+              <nz-tag
+                style="cursor: pointer"
+                [nzColor]="'volcano'"
+                (click)="deleteDocument(data._id)"
+                >Удалить
               </nz-tag>
             </div>
           </td>
@@ -79,17 +129,33 @@
       }
     </tbody>
   </nz-table>
-
 </div>
 
 <nz-dropdown-menu #documentNumber="nzDropdownMenu">
   <div [formGroup]="searchDocumentByField" class="ant-table-filter-dropdown">
     <div class="search-box">
-      <input formControlName="documentNumber" nz-input placeholder="По ИД документа" type="text" />
-      <button (click)="search()" class="search-button" nz-button nzSize="default" nzType="primary">
+      <input
+        formControlName="documentNumber"
+        nz-input
+        placeholder="По ИД документа"
+        type="text"
+      />
+      <button
+        (click)="search()"
+        class="search-button"
+        nz-button
+        nzSize="default"
+        nzType="primary"
+      >
         Search
       </button>
-      <button (click)="resetByField('documentNumber')" nz-button nzSize="default">Reset</button>
+      <button
+        (click)="resetByField('documentNumber')"
+        nz-button
+        nzSize="default"
+      >
+        Reset
+      </button>
     </div>
   </div>
 </nz-dropdown-menu>
@@ -97,11 +163,24 @@
 <nz-dropdown-menu #title="nzDropdownMenu">
   <div [formGroup]="searchDocumentByField" class="ant-table-filter-dropdown">
     <div class="search-box">
-      <input formControlName="title" nz-input placeholder="По названию" type="text" />
-      <button (click)="search()" class="search-button" nz-button nzSize="default" nzType="primary">
+      <input
+        formControlName="title"
+        nz-input
+        placeholder="По названию"
+        type="text"
+      />
+      <button
+        (click)="search()"
+        class="search-button"
+        nz-button
+        nzSize="default"
+        nzType="primary"
+      >
         Search
       </button>
-      <button (click)="resetByField('title')" nz-button nzSize="default">Reset</button>
+      <button (click)="resetByField('title')" nz-button nzSize="default">
+        Reset
+      </button>
     </div>
   </div>
 </nz-dropdown-menu>
@@ -109,12 +188,24 @@
 <nz-dropdown-menu #createdDate="nzDropdownMenu">
   <div [formGroup]="searchDocumentByField" class="ant-table-filter-dropdown">
     <div class="search-box">
-      <nz-date-picker [nzDisabledDate]="disableFutureDates" nzFormat="dd-MM-yyyy" formControlName="createdDate"
-        nzSize="default"></nz-date-picker>
-      <button (click)="search()" class="search-button" nz-button nzSize="default" nzType="primary">
+      <nz-date-picker
+        [nzDisabledDate]="disableFutureDates"
+        nzFormat="dd-MM-yyyy"
+        formControlName="createdDate"
+        nzSize="default"
+      ></nz-date-picker>
+      <button
+        (click)="search()"
+        class="search-button"
+        nz-button
+        nzSize="default"
+        nzType="primary"
+      >
         Search
       </button>
-      <button (click)="resetByField('createdDate')" nz-button nzSize="default">Reset</button>
+      <button (click)="resetByField('createdDate')" nz-button nzSize="default">
+        Reset
+      </button>
     </div>
   </div>
 </nz-dropdown-menu>
@@ -122,17 +213,35 @@
 <nz-dropdown-menu #docName="nzDropdownMenu">
   <div [formGroup]="searchDocumentByField" class="ant-table-filter-dropdown">
     <div class="search-box">
-      <input formControlName="docName" nz-input placeholder="По документу" type="text" />
-      <button (click)="search()" class="search-button" nz-button nzSize="default" nzType="primary">
+      <input
+        formControlName="docName"
+        nz-input
+        placeholder="По документу"
+        type="text"
+      />
+      <button
+        (click)="search()"
+        class="search-button"
+        nz-button
+        nzSize="default"
+        nzType="primary"
+      >
         Search
       </button>
-      <button (click)="resetByField('docName')" nz-button nzSize="default">Reset</button>
+      <button (click)="resetByField('docName')" nz-button nzSize="default">
+        Reset
+      </button>
     </div>
   </div>
 </nz-dropdown-menu>
 
-<nz-modal (nzOnCancel)="handleCancelDocumentModal()" (nzOnOk)="createDocument()"
-  [(nzVisible)]="isVisibleAddDocumentModal" nzCentered nzTitle="Название документа">
+<nz-modal
+  (nzOnCancel)="handleCancelDocumentModal()"
+  (nzOnOk)="createDocument()"
+  [(nzVisible)]="isVisibleAddDocumentModal"
+  nzCentered
+  nzTitle="Название документа"
+>
   <ng-container *nzModalContent>
     <form [formGroup]="addDocumentForm">
       <nz-input-group [nzSuffix]="suffixTemplateInfo" nzAddOnAfter=".pdf">
@@ -140,7 +249,12 @@
       </nz-input-group>
 
       <ng-template #suffixTemplateInfo>
-        <span nz-icon nz-tooltip nzTooltipTitle="Название документа должно быть указано!" nzType="info-circle"></span>
+        <span
+          nz-icon
+          nz-tooltip
+          nzTooltipTitle="Название документа должно быть указано!"
+          nzType="info-circle"
+        ></span>
       </ng-template>
     </form>
   </ng-container>

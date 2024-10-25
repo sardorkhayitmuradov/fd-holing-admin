@@ -228,7 +228,7 @@ export class DocumentListComponent
   public handleDownloadDocument(
     doc: IDocument
   ): void {
-    if(!doc.document) {
+    if(!doc.original) {
       this.message.create("error", "Файл недоступен по причине отсутствия!", {
         nzDuration: 2000,
       })
@@ -236,7 +236,7 @@ export class DocumentListComponent
       return;
     }
 
-    const url = `https://fdholding.gymrat.uz/${doc.document}`;
+    const url = `https://fdholding.gymrat.uz/document/${doc._id}`;
     
     this.downloadPdf(url)
   }
@@ -351,7 +351,6 @@ export class DocumentListComponent
     this.documentList$ = this._documentService.searchDocument(searchFields).pipe(
       map((response: IDocumentsList): IDocument[] => {
         this.searchTitleVisible = false;
-        this.searchDocumentNameVisible = false;
         this.searchCreatedDateVisible = false;
         this.searchDocumentIdVisible = false;
         this.isLoadingTable = false;

@@ -11,6 +11,7 @@ import {
   IReqeustDocumentListSearch,
   IReqeustDocumentUpdate,
   IRequestDocumentList,
+  SelectedFilesType,
 } from '@core/interceptors/documents/documents.interface';
 import { IResponse } from '@core/interfaces/reponse.interface';
 
@@ -80,18 +81,17 @@ export class DocumentService {
 
   public updateDocument(
     id: string,
-    body: File,
-    params: IReqeustDocumentUpdate,
+    body: SelectedFilesType,
   ): Observable<unknown> {
     const formData = new FormData();
 
-    formData.append('document', body as Blob);
+    for (const file in body) {
+      if (body[file]) {
+        formData.append(file, body[file] as Blob);
+      }
+    }
 
-    return this._httpService.put(`${ENDPOINTS.documents.api}/${id}`, formData, {
-      params: {
-        ...params,
-      },
-    });
+    return this._httpService.put(`${ENDPOINTS.documents.api}/${id}`, formData);
   }
 
   public deleteDocumentById(id: string): Observable<IDocument> {
