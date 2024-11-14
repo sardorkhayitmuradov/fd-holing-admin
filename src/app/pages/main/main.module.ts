@@ -13,15 +13,15 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'dashboard',
+        redirectTo: 'documents',
       },
-      {
-        path: 'dashboard',
-        loadComponent: () =>
-          import('./dashboard/dashboard.component').then(
-            (m) => m.DashboardComponent,
-          ),
-      },
+      // {
+      //   path: 'dashboard',
+      //   loadComponent: () =>
+      //     import('./dashboard/dashboard.component').then(
+      //       (m) => m.DashboardComponent,
+      //     ),
+      // },
       {
         path: 'documents',
         loadComponent: () =>

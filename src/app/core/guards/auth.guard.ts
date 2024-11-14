@@ -32,7 +32,7 @@ export const isAnonymous = guardFactory(
     return authState.checkAuthenticated().pipe(
       switchMap(authorized => {
         if(authorized) {
-          return from(router.navigate(["/admin/dashboard"])).pipe(map(() => true))
+          return from(router.navigate(["/admin/documents"])).pipe(map(() => true))
         } else {
           return of(true)
         }
