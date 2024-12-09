@@ -16,6 +16,8 @@ import {
 } from '@core/interceptors/documents/documents.interface';
 import { DocumentService } from '@core/services/requests/documents/documents.service';
 import { UnsubscribeDirective } from '@shared/directives/unsubscribe.directive';
+import { NzModalComponent } from 'ng-zorro-antd/modal';
+import { NzPopconfirmDirective } from 'ng-zorro-antd/popconfirm';
 
 @Component({
   selector: 'fd-document',
@@ -28,12 +30,16 @@ import { UnsubscribeDirective } from '@shared/directives/unsubscribe.directive';
     NzUploadComponent,
     NzIconDirective,
     PdfViewerModule,
+    NzModalComponent,
+    NzPopconfirmDirective,
   ],
   templateUrl: './document.component.html',
   styleUrl: './document.component.scss',
 })
 export class DocumentComponent extends UnsubscribeDirective implements OnInit {
   public loading = false;
+  public previewVisible = false;
+  public previewFile = null;
 
   public selectedFiles: SelectedFilesType = {
     original: null,
@@ -50,6 +56,7 @@ export class DocumentComponent extends UnsubscribeDirective implements OnInit {
   // private readonly http = inject(HttpClient);
 
   private _document: IDocument;
+
   public constructor() {
     super();
   }
@@ -111,6 +118,7 @@ export class DocumentComponent extends UnsubscribeDirective implements OnInit {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public beforeUploadOriginal = (file: any): boolean => {
+    console.log(file);
     if (file.type !== 'application/pdf') {
       this.message.error('Вы можете загружать только PDF файлы!');
 
@@ -130,6 +138,7 @@ export class DocumentComponent extends UnsubscribeDirective implements OnInit {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public beforeUploadTranslated = (file: any): boolean => {
+    console.log(file);
     if (file.type !== 'application/pdf') {
       this.message.error('Вы можете загружать только PDF файлы!');
 
@@ -146,6 +155,27 @@ export class DocumentComponent extends UnsubscribeDirective implements OnInit {
 
     return false; // Prevent automatic upload
   };
+
+  //Preview document after clicking preview button
+
+  public handlePreview(file: any): void {
+    if (file == null) return;
+    const fileReader = new FileReader();
+
+    if (file.type == 'application/pdf') {
+      fileReader.onload = (e: ProgressEvent<FileReader>): void => {
+        this.previewFile = e.target?.result as string;
+        this.cdr.detectChanges(); // Update the view after reading the file
+      };
+
+      fileReader.readAsArrayBuffer(file); // Read file as ArrayBuffer for PDF preview
+    }
+
+    this.previewFile = file;
+    this.previewVisible = true;
+
+    this.cdr.detectChanges();
+  }
 
   private getDocument(id: string): void {
     this.loading = true;

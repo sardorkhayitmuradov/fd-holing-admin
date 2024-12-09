@@ -12,4 +12,5 @@ export interface DocumentAddFrom {
 export interface IPaginationDocuments {
   page: number;
   limit: number;
+  total: number;
 }

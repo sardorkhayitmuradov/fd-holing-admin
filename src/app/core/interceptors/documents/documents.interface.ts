@@ -1,4 +1,5 @@
 export interface IDocument {
+  i: number;
   _id: string;
   title: string;
   original: string;
