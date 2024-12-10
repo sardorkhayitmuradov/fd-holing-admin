@@ -183,10 +183,10 @@ export class DocumentComponent extends UnsubscribeDirective implements OnInit {
     this.subscribeTo = this._documentService.getDocumentById(id).subscribe({
       next: (response: IDocument): void => {
         this.original = response.original
-          ? 'https://fdholding.gymrat.uz/' + response.original
+          ? 'https://api.fd-holding.org/' + response.original
           : null;
         this.translated = response.translated
-          ? 'https://fdholding.gymrat.uz/' + response.translated
+          ? 'https://api.fd-holding.org/' + response.translated
           : null;
 
         this._document = response;

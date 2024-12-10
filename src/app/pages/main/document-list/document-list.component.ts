@@ -45,6 +45,7 @@ import { UnsubscribeDirective } from '@shared/directives/unsubscribe.directive';
 import { TextMaskPipe } from '@shared/pipes/text-mask.pipe';
 
 import { IPaginationDocuments } from './interface/document-list.interface';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @Component({
   selector: 'fd-document-list',
@@ -69,6 +70,7 @@ import { IPaginationDocuments } from './interface/document-list.interface';
     RouterLink,
     NzDropdownMenuComponent,
     NzDatePickerComponent,
+    NzPopconfirmModule,
   ],
   templateUrl: './document-list.component.html',
   styleUrl: './document-list.component.scss',
@@ -213,7 +215,6 @@ export class DocumentListComponent
 
   // Pagination change
   public handlePageChange(page: number): void {
-    console.log('page', page);
     this.paginationDocuments.page = page;
     this.isLoadingTable = true;
     this._router.navigate([], {
@@ -225,7 +226,6 @@ export class DocumentListComponent
   // Navigate to
 
   public handleLimitChange(limit: number): void {
-    console.log('limit', limit);
     this.paginationDocuments.limit = limit;
     this.isLoadingTable = true;
     this._router.navigate([], {
@@ -260,7 +260,7 @@ export class DocumentListComponent
       return;
     }
 
-    const url = `https://fdholding.gymrat.uz/document/${doc._id}`;
+    const url = `https://api.fd-holding.org/document/${doc._id}`;
 
     this.downloadPdf(url);
   }
@@ -322,7 +322,7 @@ export class DocumentListComponent
 
   private initForm(): void {
     this.addDocumentForm = this._formBuilder.nonNullable.group({
-      title: ['Случайное название', Validators.required],
+      title: ['Document', Validators.required],
     });
 
     this.searchDocumentByField = this._formBuilder.nonNullable.group({

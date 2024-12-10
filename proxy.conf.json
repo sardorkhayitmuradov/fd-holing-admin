@@ -1,6 +1,6 @@
 {
   "/api/auth/*": {
-    "target": "https://fdholding.gymrat.uz/auth",
+    "target": "https://api.fd-holding.org/auth",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
@@ -9,7 +9,7 @@
     }
   },
   "/api/documents/*": {
-    "target": "https://fdholding.gymrat.uz",
+    "target": "https://api.fd-holding.org",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
@@ -18,7 +18,7 @@
     }
   },
   "/api/uploads/*": {
-    "target": "https://fdholding.gymrat.uz",
+    "target": "https://api.fd-holding.org",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",

@@ -43,45 +43,45 @@
     nzTableLayout="fixed"
   >
     <thead>
-    <tr>
-      <th nzCustomFilter nzWidth="100px">Номер</th>
-      <th nzCustomFilter nzWidth="200px">
-        ID документа
-        <nz-filter-trigger
-          [(nzVisible)]="searchDocumentIdVisible"
-          [nzActive]="
+      <tr>
+        <th nzCustomFilter nzWidth="100px">Номер</th>
+        <th nzCustomFilter nzWidth="200px">
+          ID документа
+          <nz-filter-trigger
+            [(nzVisible)]="searchDocumentIdVisible"
+            [nzActive]="
               searchDocumentByField.get('documentNumber').value.length > 0
             "
-          [nzDropdownMenu]="documentNumber"
-        >
-          <span nz-icon nzType="search"></span>
-        </nz-filter-trigger>
-      </th>
-      <th nzCustomFilter>
-        Заголовок
-        <nz-filter-trigger
-          [(nzVisible)]="searchTitleVisible"
-          [nzActive]="searchDocumentByField.get('title').value.length > 0"
-          [nzDropdownMenu]="title"
-        >
-          <span nz-icon nzType="search"></span>
-        </nz-filter-trigger>
-      </th>
-      <th nzCustomFilter>Документ (original)</th>
-      <th nzCustomFilter>Документ (translated)</th>
-      <th nzCustomFilter nzWidth="130px">Просмотры</th>
-      <th nzCustomFilter nzWidth="200px">
-        Дата создания
-        <nz-filter-trigger
-          [(nzVisible)]="searchCreatedDateVisible"
-          [nzActive]="formatDate.length > 0 || false"
-          [nzDropdownMenu]="createdDate"
-        >
-          <span nz-icon nzType="search"></span>
-        </nz-filter-trigger>
-      </th>
-      <th nzWidth="250px"></th>
-    </tr>
+            [nzDropdownMenu]="documentNumber"
+          >
+            <span nz-icon nzType="search"></span>
+          </nz-filter-trigger>
+        </th>
+        <th nzCustomFilter>
+          Заголовок
+          <nz-filter-trigger
+            [(nzVisible)]="searchTitleVisible"
+            [nzActive]="searchDocumentByField.get('title').value.length > 0"
+            [nzDropdownMenu]="title"
+          >
+            <span nz-icon nzType="search"></span>
+          </nz-filter-trigger>
+        </th>
+        <th nzCustomFilter>Документ (original)</th>
+        <th nzCustomFilter>Документ (translated)</th>
+        <th nzCustomFilter nzWidth="130px">Просмотры</th>
+        <th nzCustomFilter nzWidth="200px">
+          Дата создания
+          <nz-filter-trigger
+            [(nzVisible)]="searchCreatedDateVisible"
+            [nzActive]="formatDate.length > 0 || false"
+            [nzDropdownMenu]="createdDate"
+          >
+            <span nz-icon nzType="search"></span>
+          </nz-filter-trigger>
+        </th>
+        <th nzWidth="250px"></th>
+      </tr>
     </thead>
     <tbody class="document__table__tbody">
       @for (data of sortTable.data; track data._id) {
@@ -107,9 +107,9 @@
               <nz-tag
                 style="cursor: pointer"
                 [routerLink]="['/admin/documents', data._id]"
-              >Смотреть
+                >Смотреть
               </nz-tag>
-              <!-- <a href="https://fdholding.gymrat.uz/uploads/IELTS_CERTIFICATE-244699367.pdf" download>download</a> -->
+              <!-- <a href="https://api.fd-holding.org/uploads/IELTS_CERTIFICATE-244699367.pdf" download>download</a> -->
               <nz-tag
                 style="cursor: pointer"
                 [nzColor]="'cyan'"
@@ -124,8 +124,12 @@
               <nz-tag
                 style="cursor: pointer"
                 [nzColor]="'volcano'"
-                (click)="deleteDocument(data._id)"
-              >Удалить
+                (nzOnConfirm)="deleteDocument(data._id)"
+                nz-popconfirm
+                nzCancelText="Отмена"
+                nzOkText="Ok"
+                nzPopconfirmTitle="Вы уверены ?"
+                >Удалить
               </nz-tag>
             </div>
           </td>
@@ -249,7 +253,7 @@
   <ng-container *nzModalContent>
     <form [formGroup]="addDocumentForm">
       <nz-input-group [nzSuffix]="suffixTemplateInfo" nzAddOnAfter=".pdf">
-        <input formControlName="title" nz-input type="text"/>
+        <input formControlName="title" nz-input type="text" />
       </nz-input-group>
 
       <ng-template #suffixTemplateInfo>
