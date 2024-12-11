@@ -25,6 +25,9 @@ import { AuthService } from '@core/services/requests/auth.service';
 import { UnsubscribeDirective } from '@shared/directives/unsubscribe.directive';
 import { StringOrJsonPipe } from '@shared/pipes/string-or-json.pipe';
 import { FormGroupFrom } from '@shared/types/form-group.types';
+import { IResponse } from '@core/interfaces/reponse.interface';
+import { ILoginResponse } from '@core/interfaces/auth/login-response.interface';
+import { ResponseStatusesEnum } from '@core/enums/response-statuses.enum';
 
 export interface ILoginForm {
   username: string;
@@ -63,12 +66,12 @@ export class LoginComponent extends UnsubscribeDirective implements OnInit {
   public readonly cdr = inject(ChangeDetectorRef);
 
   public loginForm = this.fb.group<FormGroupFrom<ILoginForm>>({
-    username: ['Ibrokhimbek', [Validators.required]],
-    password: ['HelloWorld', [Validators.required]],
+    username: ['', [Validators.required]],
+    password: ['', [Validators.required]],
   });
 
-  public constructor(){
-    super()
+  public constructor() {
+    super();
   }
 
   public ngOnInit(): void {
@@ -78,18 +81,33 @@ export class LoginComponent extends UnsubscribeDirective implements OnInit {
   public login(): void {
     if (this.loginForm.invalid) return;
 
+    const formValues = {
+      username: this.loginForm.getRawValue().username?.trim(),
+      password: this.loginForm.getRawValue().password?.trim(),
+    };
+
     this.loading = true;
     this.subscribeTo = this.authService
-      .logIn(this.loginForm.getRawValue() as ILoginForm)
+      .logIn(formValues as ILoginForm)
       .subscribe({
-        next: (): void => {
+        next: (response: IResponse<ILoginResponse>): void => {
+          if (response.status === ResponseStatusesEnum.Error) {
+            this.loading = false;
+            this.createErrorMessage(
+              response.message || 'Ошибка при входе в систему',
+            );
+
+            return;
+          }
+
           this.loading = false;
           this.router.navigate(['/admin']);
           this.createBasicMessage();
         },
         error: (err): void => {
+          console.log(err);
           this.loading = false;
-          this.createErrorMessage(err.error.message || 'Ошибка при входе в систему')
+          this.createErrorMessage(err?.message || 'Ошибка при входе в систему');
         },
       });
 
@@ -103,8 +121,8 @@ export class LoginComponent extends UnsubscribeDirective implements OnInit {
   }
 
   private createErrorMessage(text: string): void {
-    this.message.create("error", text, {
+    this.message.create('error', text, {
       nzDuration: 2000,
-    })
+    });
   }
 }

@@ -17,33 +17,39 @@ import { RequestService } from './@request.service';
 })
 export class AuthService {
   private _authenticated = false;
-  private readonly _isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(false)
+  private readonly _isAuthenticated: BehaviorSubject<boolean> =
+    new BehaviorSubject(false);
 
   public constructor(
     private readonly _http: RequestService,
     private readonly _accessTokenStorageService: AccessTokenStorageService,
-    private readonly _router: Router
+    private readonly _router: Router,
   ) {}
 
   public get isAuthenticated(): Observable<boolean> {
     return this._isAuthenticated.asObservable();
   }
 
-  public logIn(loginBody: ILoginRequestBody): Observable<ILoginResponse> {
+  public logIn(
+    loginBody: ILoginRequestBody,
+  ): Observable<IResponse<ILoginResponse>> {
     return this._http
       .post(ENDPOINTS.auth.api, ENDPOINTS.auth.endpoints.login, loginBody)
       .pipe(
-        map((response: IResponse<ILoginResponse>): ILoginResponse => {
-          if (response.data.access_token){
-            this._accessTokenStorageService.setItem(response.data.access_token);
-            this._authenticated = true;
-            this._isAuthenticated.next(true);
-          } 
+        map(
+          (response: IResponse<ILoginResponse>): IResponse<ILoginResponse> => {
+            if (response?.data?.access_token) {
+              this._accessTokenStorageService.setItem(
+                response.data.access_token,
+              );
+              this._authenticated = true;
+              this._isAuthenticated.next(true);
+            }
 
-          return response.data;
-        }),
+            return response;
+          },
+        ),
       );
-
   }
 
   public logOut(): Observable<boolean> {
@@ -69,5 +75,4 @@ export class AuthService {
     this._authenticated = false;
     this._isAuthenticated.next(false);
   }
-
 }
